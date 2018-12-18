@@ -1,6 +1,6 @@
 <?php
 
-namespace MetaRush\Auth;
+namespace MetaRush\OtpAuth;
 
 class Config
 {
