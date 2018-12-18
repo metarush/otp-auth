@@ -1,0 +1,22 @@
+{
+    "name": "metarush/otp-auth",
+    "description": "Simple authentication using one-time passwords (email token)",
+    "license": "MIT",
+    "keywords": ["php", "authentication", "auth", "one-time password", "login"],
+    "authors": [
+        {
+            "name": "Zak W",
+            "email": "zkwbbr@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "MetaRush\\OtpAuth\\": "src"
+        }
+    },
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5"
+    }
+}
