@@ -40,9 +40,6 @@ class Config
      */
     public function getUsernameColumn(): string
     {
-        if (!$this->usernameColumn)
-            throw new Errors\EmptyError('You must call setUsernameColumn() with a non-empty argument');
-
         return $this->usernameColumn;
     }
 
