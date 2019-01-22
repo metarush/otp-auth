@@ -4,11 +4,64 @@ namespace MetaRush\OtpAuth;
 
 class Config
 {
-    private $otpLength;
-    private $characterPool;
+    private $table;
+    private $usernameColumn;
+    private $otpLength = 8;
+    private $characterPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     /**
-     * @return mixed
+     * Get the name of table column where username is stored
+     *
+     * @return string
+     */
+    public function getUsernameColumn(): string
+    {
+        if (!$this->usernameColumn)
+            throw new Errors\EmptyError('You must call setUsernameColumn() with a non-empty argument');
+
+        return $this->usernameColumn;
+    }
+
+    /**
+     * Ser the name of table column where username is stored
+     *
+     * @param string $usernameColumn
+     * @return $this
+     */
+    public function setUsernameColumn(string $usernameColumn)
+    {
+        $this->usernameColumn = $usernameColumn;
+
+        return $this;
+    }
+
+    /**
+     * Get name of table where usernames will be authenticated
+     *
+     * @return string
+     */
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    /**
+     * Name of table where usernames will be authenticated
+     *
+     * @param string $table
+     * @return $this
+     */
+    public function setTable(string $table)
+    {
+        $this->table = $table;
+
+        return $this;
+    }
+
+    /**
+     * Get OTP length
+     *
+     * @return int
      */
     public function getOtpLength(): int
     {
@@ -16,9 +69,12 @@ class Config
     }
 
     /**
-     * @param mixed $otpLength
+     * Set OTP length
      *
-     * @return self
+     * Default: 8
+     *
+     * @param int $otpLength
+     * @return $this
      */
     public function setOtpLength(int $otpLength)
     {
@@ -28,22 +84,22 @@ class Config
     }
 
     /**
-     * @return mixed
+     * Get character pool where the token will be derived from
+     *
+     * @return string
      */
-    public function getCharacterPool():  ? string
+    public function getCharacterPool(): string
     {
         return $this->characterPool;
     }
 
     /**
-     * Set the pool of characters where the token will be derived from.
-     * If null, the following pool will be used:
+     * Set the pool of characters where the token will be derived from
      *
-     * 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+     * Default: 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
      *
-     * @param mixed $characterPool
-     *
-     * @return self
+     * @param string $characterPool
+     * @return $this
      */
     public function setCharacterPool(string $characterPool)
     {

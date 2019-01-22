@@ -4,27 +4,30 @@ namespace MetaRush\OtpAuth;
 
 class Auth
 {
-    private $cfg;
     private $repo;
 
-    public function __construct(Config $cfg, Repo $repo)
+    public function __construct(Repo $repo)
     {
-        $this->cfg = $cfg;
         $this->repo = $repo;
     }
 
-    public function isUserExist(string $username)
+    /**
+     * Check if user exist
+     *
+     * @param string $username
+     * @return bool
+     */
+    public function userExist(string $username): bool
     {
-
+        return $this->repo->userExist($username);
     }
 
     public function sendOtp(string $username)
     {
 
-
     }
 
-    public function isValidOtp(string $otp, string $username): bool
+    public function validOtp(string $otp, string $username): bool
     {
 
     }
@@ -43,5 +46,4 @@ class Auth
     {
 
     }
-
 }

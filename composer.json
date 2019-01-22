@@ -1,12 +1,13 @@
 {
     "name": "metarush/otp-auth",
-    "description": "Simple authentication using one-time passwords (email token)",
-    "license": "MIT",
+    "type": "library",
+    "description": "Authentication library using one-time passwords (via email token)",
     "keywords": ["php", "authentication", "auth", "one-time password", "login"],
+    "license": "MIT",
     "authors": [
         {
-            "name": "Zak W",
-            "email": "zkwbbr@gmail.com"
+            "name": "metarush/otp-auth contributors",
+            "homepage": "https://github.com/metarush/otp-auth/graphs/contributors"
         }
     ],
     "autoload": {
@@ -15,6 +16,8 @@
         }
     },
     "require": {
+        "php": ">=7.1",
+        "metarush/data-mapper": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5"

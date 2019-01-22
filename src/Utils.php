@@ -4,11 +4,12 @@ namespace MetaRush\OtpAuth;
 
 class Utils
 {
+
     /**
      * Generates random token
      *
      * @param int $length Length of token to be generated
-     * @param int $pool Pool of characters where token will be generated from. Default: a-z A-Z 0-9
+     * @param string $pool Pool of characters where token will be generated from. Default: a-z A-Z 0-9
      * @return string
      */
     public static function randomToken(int $length, string $pool = null): string
