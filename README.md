@@ -1,2 +1,3 @@
-# otp-auth
-Simple authentication using one-time passwords (email token)
+# metarush/otp-auth
+
+Authentication library using one-time passwords (via email token)
