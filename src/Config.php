@@ -6,8 +6,32 @@ class Config
 {
     private $table;
     private $usernameColumn;
+    private $emailColumn;
     private $otpLength = 8;
     private $characterPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    /**
+     * Get the name of table column where email is stored
+     *
+     * @return string
+     */
+    public function getEmailColumn(): string
+    {
+        return $this->emailColumn;
+    }
+
+    /**
+     * Set the name of table column where email is stored
+     *
+     * @param string $emailColumn
+     * @return $this
+     */
+    public function setEmailColumn(string $emailColumn)
+    {
+        $this->emailColumn = $emailColumn;
+
+        return $this;
+    }
 
     /**
      * Get the name of table column where username is stored
@@ -23,7 +47,7 @@ class Config
     }
 
     /**
-     * Ser the name of table column where username is stored
+     * Set the name of table column where username is stored
      *
      * @param string $usernameColumn
      * @return $this

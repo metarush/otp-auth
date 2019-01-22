@@ -27,4 +27,20 @@ class Repo
 
         return $this->mapper->findOne($this->cfg->getTable(), $where) ? true : false;
     }
+
+    /**
+     * Get email of user
+     *
+     * @param string $username
+     * @return string|null
+     */
+    public function getEmail(string $username): ?string
+    {
+        $where = [$this->cfg->getUsernameColumn() => $username];
+
+        if (!$user = $this->mapper->findOne($this->cfg->getTable(), $where))
+            return null;
+
+        return $user[$this->cfg->getEmailColumn()];
+    }
 }
