@@ -5,3 +5,4 @@ vendor/
 public/
 resources/docker/
 nbproject/
+.env
