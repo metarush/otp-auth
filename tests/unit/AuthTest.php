@@ -34,9 +34,16 @@ class AuthTest extends TestCase
             $this->pdo->query('
                 CREATE TABLE `' . $this->table . '` (
                 `id`        INTEGER PRIMARY KEY AUTOINCREMENT,
-                `username`	TEXT
+                `email`     TEXT
             )');
         }
+
+        // ----------------------------------------------
+        // load test smtp details from .env to $_ENV
+        // ----------------------------------------------
+
+        $dotenv = \Dotenv\Dotenv::create(__DIR__);
+        $dotenv->load();
 
         // ----------------------------------------------
         // init OtpAuth
@@ -49,10 +56,17 @@ class AuthTest extends TestCase
         $this->seedTestData();
 
         $cfg = (new OtpAuth\Config())
+            ->setSmtpHost($_ENV['SMTP_HOST'])
+            ->setSmtpUser($_ENV['SMTP_USER'])
+            ->setSmtpPass($_ENV['SMTP_PASS'])
+            ->setSmtpPort($_ENV['SMTP_PORT'])
+            ->setFromEmail('sender@example.com')
             ->setTable($this->table)
-            ->setUsernameColumn('username');
+            ->setUsernameColumn('email')
+            ->setEmailColumn('email');
 
         $this->otpAuth = new OtpAuth\Auth(
+            $cfg,
             new OtpAuth\Repo($cfg, $this->mapper)
         );
     }
@@ -71,7 +85,7 @@ class AuthTest extends TestCase
     public function seedTestData()
     {
         $data = [
-            ['username' => 'foo']
+            ['email' => 'foo@example.com']
         ];
 
         foreach ($data as $v)
@@ -80,8 +94,18 @@ class AuthTest extends TestCase
 
     public function testUserExist()
     {
-        $r = $this->otpAuth->userExist('foo');
+        $r = $this->otpAuth->userExist('foo@example.com');
 
         $this->assertTrue($r);
+    }
+
+    public function testSendOtp()
+    {
+        try {
+            $this->otpAuth->sendOtp('foo@example.com');
+            $this->assertTrue(true);
+        } catch (Exception $ex) {
+            $this->assertTrue(false, $ex->getMessage());
+        }
     }
 }

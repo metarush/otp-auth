@@ -4,16 +4,135 @@ namespace MetaRush\OtpAuth;
 
 class Config
 {
+    private $smtpHost;
+    private $smtpUser;
+    private $smtpPass;
+    private $smtpEncr;
+    private $smtpPort;
     private $fromName;
     private $fromEmail;
     private $subject = "Here's your OTP";
     private $body = "{OTP}\r\n\r\nNote: This OTP is valid for 5 minutes";
-    private $transport;
     private $table;
     private $usernameColumn;
     private $emailColumn;
     private $otpLength = 8;
     private $characterPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    /**
+     * Get SMTP host
+     *
+     * @return string
+     */
+    public function getSmtpHost(): string
+    {
+        return $this->smtpHost;
+    }
+
+    /**
+     * Set SMTP host
+     *
+     * @param string $smtpHost
+     * @return $this
+     */
+    public function setSmtpHost(string $smtpHost)
+    {
+        $this->smtpHost = $smtpHost;
+
+        return $this;
+    }
+
+    /**
+     * Get SMTP username
+     *
+     * @return string
+     */
+    public function getSmtpUser(): string
+    {
+        return $this->smtpUser;
+    }
+
+    /**
+     * Set SMTP username
+     *
+     * @param string $smtpUser
+     * @return $this
+     */
+    public function setSmtpUser(string $smtpUser)
+    {
+        $this->smtpUser = $smtpUser;
+
+        return $this;
+    }
+
+    /**
+     * Get SMTP password
+     *
+     * @return string
+     */
+    public function getSmtpPass(): string
+    {
+        return $this->smtpPass;
+    }
+
+    /**
+     * Set SMTP password
+     *
+     * @param string $smtpPass
+     * @return $this
+     */
+    public function setSmtpPass(string $smtpPass)
+    {
+        $this->smtpPass = $smtpPass;
+
+        return $this;
+    }
+
+    /**
+     * Get SMTP encryption protocol
+     *
+     * @return string|null
+     */
+    public function getSmtpEncr(): ?string
+    {
+        return $this->smtpEncr;
+    }
+
+    /**
+     * Set SMTP encryption protocol e.g., TLS, SSL
+     *
+     * @param string|null $smtpEncr
+     * @return $this
+     */
+    public function setSmtpEncr(?string $smtpEncr)
+    {
+        $this->smtpEncr = $smtpEncr;
+
+        return $this;
+    }
+
+    /**
+     * Get SMTP port
+     *
+     * @return int
+     */
+    public function getSmtpPort(): int
+    {
+        return $this->smtpPort;
+    }
+
+    /**
+     * Set SMTP port
+     *
+     * @param int $smtpPort
+     * @return $this
+     */
+    public function setSmtpPort(int $smtpPort)
+    {
+        $this->smtpPort = $smtpPort;
+
+        return $this;
+    }
 
     /**
      * Get the From Name of the OTP message
@@ -61,30 +180,6 @@ class Config
     }
 
     /**
-     * Get the SwiftMailer transport object that will be used to send email
-     *
-     * @return \Swift_Transport
-     */
-    public function getTransport(): \Swift_Transport
-    {
-        return $this->transport;
-    }
-
-    /**
-     * Set the SwiftMailer transport object that will be used to send email
-     *
-     * @link https://swiftmailer.symfony.com/docs/sending.html#transport-types
-     * @param \Swift_Transport $transport
-     * @return $this
-     */
-    public function setTransport(\Swift_Transport $transport)
-    {
-        $this->transport = $transport;
-
-        return $this;
-    }
-
-    /**
      * Get subject of the OTP email
      *
      * @return string
@@ -114,7 +209,7 @@ class Config
      */
     public function getBody(): string
     {
-        return $this->message;
+        return $this->body;
     }
 
     /**
@@ -125,7 +220,7 @@ class Config
      */
     public function setBody(string $body)
     {
-        $this->message = $body;
+        $this->body = $body;
         return $this;
     }
 

@@ -36,6 +36,9 @@ class Repo
      */
     public function getEmail(string $username): ?string
     {
+        if (!$this->userExist($username))
+            throw new \Error('User does not exist');
+
         $where = [$this->cfg->getUsernameColumn() => $username];
 
         if (!$user = $this->mapper->findOne($this->cfg->getTable(), $where))
