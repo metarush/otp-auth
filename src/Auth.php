@@ -40,9 +40,13 @@ class Auth
                 $this->cfg->getCharacterPool()
         );
 
+        // set OTP in DB
+        $this->repo->setOtp($otp, $username);
+
         // insert OTP to email body
         $body = str_replace('{OTP}', $otp, $this->cfg->getBody());
 
+        // send OTP to email
         $this->mailer($email, $body);
     }
 

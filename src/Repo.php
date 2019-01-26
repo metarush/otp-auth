@@ -46,4 +46,18 @@ class Repo
 
         return $user[$this->cfg->getEmailColumn()];
     }
+
+    /**
+     * Set OTP in Db
+     *
+     * @param string $otp
+     * @param string $username
+     * @return void
+     */
+    public function setOtp(string $otp, string $username): void
+    {
+        $data = [$this->cfg->getOtpColumn() => $otp];
+        $where = [$this->cfg->getUsernameColumn() => $username];
+        $this->mapper->update($this->cfg->getTable(), $data, $where);
+    }
 }

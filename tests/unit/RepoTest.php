@@ -35,7 +35,8 @@ class RepoTest extends TestCase
                 CREATE TABLE `' . $this->table . '` (
                 `id`        INTEGER PRIMARY KEY AUTOINCREMENT,
                 `username`  TEXT,
-                `email`     TEXT
+                `email`     TEXT,
+                `otp`       TEXT
             )');
         }
 
@@ -52,7 +53,8 @@ class RepoTest extends TestCase
         $cfg = (new OtpAuth\Config())
             ->setTable($this->table)
             ->setUsernameColumn('username')
-            ->setEmailColumn('email');
+            ->setEmailColumn('email')
+            ->setOtpColumn('otp');
 
         $this->repo = new OtpAuth\Repo($cfg, $this->mapper);
     }
@@ -95,5 +97,16 @@ class RepoTest extends TestCase
         $actual = $this->repo->getEmail('foo');
 
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testSetOtp()
+    {
+        $username = 'foo';
+        $otp = '123';
+        $this->repo->setOtp($otp, $username);
+
+        $row = $this->mapper->findOne($this->table, ['username' => $username]);
+
+        $this->assertEquals($otp, $row['otp']);
     }
 }

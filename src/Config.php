@@ -16,8 +16,32 @@ class Config
     private $table;
     private $usernameColumn;
     private $emailColumn;
+    private $otpColumn;
     private $otpLength = 8;
     private $characterPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    /**
+     * Get the name of table column where OTP is stored
+     *
+     * @return string
+     */
+    public function getOtpColumn(): string
+    {
+        return $this->otpColumn;
+    }
+
+    /**
+     * Set the name of table column where OTP is stored
+     *
+     * @param string $otpColumn
+     * @return $this
+     */
+    public function setOtpColumn(string $otpColumn)
+    {
+        $this->otpColumn = $otpColumn;
+
+        return $this;
+    }
 
     /**
      * Get SMTP host
