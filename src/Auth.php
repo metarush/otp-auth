@@ -40,25 +40,28 @@ class Auth
                 $this->cfg->getCharacterPool()
         );
 
-        // set OTP in DB
-        $this->repo->setOtp($otp, $username);
+        // set otpHash and otpToken in DB
+        $otpHash = password_hash($otp, PASSWORD_DEFAULT);
+        $otpToken = base64_encode(random_bytes(9)); // outputs 12 chars
+        $this->repo->setOtpHashAndToken($otpHash, $otpToken, $username);
 
-        // insert OTP to email body
-        $body = str_replace('{OTP}', $otp, $this->cfg->getBody());
+        // set token in browser for later verification
+        $expires = time() + (60 * $this->cfg->getOtpExpire());
+        setcookie($this->cfg->getOtpCookieName(), $otpToken, $expires, '/');
 
         // send OTP to email
-        $this->mailer($email, $body);
+        $this->mailer($email, $otp);
     }
 
     /**
-     * Send email using settings fron Config class
+     * Send OTP to email using settings from Config class
      *
      * @param string $to
-     * @param string $body
+     * @param string $otp
      * @return void
      * @throws \Error
      */
-    private function mailer(string $to, string $body): void
+    private function mailer(string $to, string $otp): void
     {
         if (!filter_var($to, FILTER_VALIDATE_EMAIL))
             throw new \Error('Email appears to be invalid');
@@ -80,7 +83,7 @@ class Auth
         $mailer->addAddress($to);
 
         $mailer->Subject = $this->cfg->getSubject();
-        $mailer->Body = $body;
+        $mailer->Body = str_replace('{OTP}', $otp, $this->cfg->getBody());
 
         $mailer->send();
     }

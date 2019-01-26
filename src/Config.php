@@ -16,29 +16,103 @@ class Config
     private $table;
     private $usernameColumn;
     private $emailColumn;
-    private $otpColumn;
+    private $otpHashColumn;
+    private $otpTokenColumn;
+    private $otpCookieName = 'MROA';
+    private $otpExpire = 5;
     private $otpLength = 8;
     private $characterPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    /**
+     * Get OTP cookie name
+     *
+     * @return string
+     */
+    public function getOtpCookieName(): string
+    {
+        return $this->otpCookieName;
+    }
+
+    /**
+     * Set OTP cookie name
+     *
+     * @param string $otpCookieName
+     * @return $this
+     */
+    public function setOtpCookieName(string $otpCookieName)
+    {
+        $this->otpCookieName = $otpCookieName;
+
+        return $this;
+    }
+
+    /**
+     * Get OTP token column
+     *
+     * @return string
+     */
+    public function getOtpTokenColumn(): string
+    {
+        return $this->otpTokenColumn;
+    }
+
+    /**
+     * Set OTP token column
+     *
+     * @param string $otpTokenColumn
+     * @return $this
+     */
+    public function setOtpTokenColumn(string $otpTokenColumn)
+    {
+        $this->otpTokenColumn = $otpTokenColumn;
+
+        return $this;
+    }
+
+    /**
+     * Get OTP expiration in minutes
+     *
+     * @return string
+     */
+    public function getOtpExpire(): string
+    {
+        return $this->otpExpire;
+    }
+
+    /**
+     * Set OTP expiration in minutes
+     *
+     * @param string $otpExpire
+     * @return $this
+     */
+    public function setOtpExpire(string $otpExpire)
+    {
+        $this->otpExpire = $otpExpire;
+
+        return $this;
+    }
 
     /**
      * Get the name of table column where OTP is stored
      *
      * @return string
      */
-    public function getOtpColumn(): string
+    public function getOtpHashColumn(): string
     {
-        return $this->otpColumn;
+        return $this->otpHashColumn;
     }
 
     /**
-     * Set the name of table column where OTP is stored
+     * Set the name of table column where OTP hash is stored
      *
-     * @param string $otpColumn
+     * Note: Must be at least 255 characters in length
+     *
+     * @param string $otpHashColumn
      * @return $this
      */
-    public function setOtpColumn(string $otpColumn)
+    public function setOtpHashColumn(string $otpHashColumn)
     {
-        $this->otpColumn = $otpColumn;
+        $this->otpHashColumn = $otpHashColumn;
 
         return $this;
     }

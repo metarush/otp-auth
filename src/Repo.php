@@ -48,16 +48,22 @@ class Repo
     }
 
     /**
-     * Set OTP in Db
+     * Set OTP hash and OTP token in Db
      *
-     * @param string $otp
+     * @param string $otpHash
+     * @param string $otpToken
      * @param string $username
      * @return void
      */
-    public function setOtp(string $otp, string $username): void
+    public function setOtpHashAndToken(string $otpHash, string $otpToken, string $username): void
     {
-        $data = [$this->cfg->getOtpColumn() => $otp];
+        $data = [
+            $this->cfg->getOtpHashColumn()  => $otpHash,
+            $this->cfg->getOtpTokenColumn() => $otpToken
+        ];
+
         $where = [$this->cfg->getUsernameColumn() => $username];
+
         $this->mapper->update($this->cfg->getTable(), $data, $where);
     }
 }

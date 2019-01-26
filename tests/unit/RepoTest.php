@@ -36,7 +36,8 @@ class RepoTest extends TestCase
                 `id`        INTEGER PRIMARY KEY AUTOINCREMENT,
                 `username`  TEXT,
                 `email`     TEXT,
-                `otp`       TEXT
+                `otpHash`   TEXT,
+                `otpToken`  TEXT
             )');
         }
 
@@ -54,7 +55,8 @@ class RepoTest extends TestCase
             ->setTable($this->table)
             ->setUsernameColumn('username')
             ->setEmailColumn('email')
-            ->setOtpColumn('otp');
+            ->setOtpHashColumn('otpHash')
+            ->setOtpTokenColumn('otpToken');
 
         $this->repo = new OtpAuth\Repo($cfg, $this->mapper);
     }
@@ -99,14 +101,17 @@ class RepoTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetOtp()
+    public function testSetOtpHashAndToken()
     {
+        $otpHash = '123';
+        $otpToken = 'abc';
         $username = 'foo';
-        $otp = '123';
-        $this->repo->setOtp($otp, $username);
+
+        $this->repo->setOtpHashAndToken($otpHash, $otpToken, $username);
 
         $row = $this->mapper->findOne($this->table, ['username' => $username]);
 
-        $this->assertEquals($otp, $row['otp']);
+        $this->assertEquals($otpHash, $row['otpHash']);
+        $this->assertEquals($otpToken, $row['otpToken']);
     }
 }

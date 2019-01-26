@@ -13,6 +13,7 @@ class AuthTest extends TestCase
     private $pdo;
     private $dbFile;
     private $otpAuth;
+    private $cfg;
 
     public function setUp()
     {
@@ -34,7 +35,9 @@ class AuthTest extends TestCase
             $this->pdo->query('
                 CREATE TABLE `' . $this->table . '` (
                 `id`        INTEGER PRIMARY KEY AUTOINCREMENT,
-                `email`     TEXT
+                `email`     TEXT,
+                `otpHash`   TEXT,
+                `otpToken`  TEXT
             )');
         }
 
@@ -55,7 +58,7 @@ class AuthTest extends TestCase
 
         $this->seedTestData();
 
-        $cfg = (new OtpAuth\Config())
+        $this->cfg = (new OtpAuth\Config())
             ->setSmtpHost($_ENV['SMTP_HOST'])
             ->setSmtpUser($_ENV['SMTP_USER'])
             ->setSmtpPass($_ENV['SMTP_PASS'])
@@ -63,11 +66,13 @@ class AuthTest extends TestCase
             ->setFromEmail('sender@example.com')
             ->setTable($this->table)
             ->setUsernameColumn('email')
-            ->setEmailColumn('email');
+            ->setEmailColumn('email')
+            ->setOtpHashColumn('otpHash')
+            ->setOtpTokenColumn('otpToken');
 
         $this->otpAuth = new OtpAuth\Auth(
-            $cfg,
-            new OtpAuth\Repo($cfg, $this->mapper)
+            $this->cfg,
+            new OtpAuth\Repo($this->cfg, $this->mapper)
         );
     }
 
@@ -94,18 +99,15 @@ class AuthTest extends TestCase
 
     public function testUserExist()
     {
-        $r = $this->otpAuth->userExist('foo@example.com');
+        $userExist = $this->otpAuth->userExist('foo@example.com');
 
-        $this->assertTrue($r);
+        $this->assertTrue($userExist);
     }
 
     public function testSendOtp()
     {
-        try {
-            $this->otpAuth->sendOtp('foo@example.com');
-            $this->assertTrue(true);
-        } catch (Exception $ex) {
-            $this->assertTrue(false, $ex->getMessage());
-        }
+        $this->otpAuth->sendOtp('foo@example.com');
+
+        $this->assertTrue(true);
     }
 }
