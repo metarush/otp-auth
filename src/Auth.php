@@ -103,16 +103,23 @@ class Auth
         $mailer->send();
     }
 
-    public function validOtp(string $otp, string $username): bool
+    /**
+     * Validate OTP
+     *
+     * @param string $otp
+     * @param string $username
+     * @param string $otpToken Optional param used for testing
+     * @return bool
+     */
+    public function validOtp(string $otp, string $username, string $otpToken = null): bool
     {
-        $new = [
-            'otpHash'  => password_hash($otp, PASSWORD_DEFAULT),
-            'otpToken' => $this->request->cookies->get($this->cfg->getOtpCookieName())
-        ];
+        $dbData = $this->repo->getOtpHashAndToken($username);
 
-        $old = $this->repo->getOtpHashAndToken($username);
+        $otpVerified = password_verify($otp, $dbData['otpHash']);
 
-        return ($new['otpHash'] === $old['otpHash'] && $new['otpToken'] === $old['otpToken']);
+        $newOtpToken = $otpToken ?? $this->request->cookies->get($this->cfg->getOtpCookieName());
+
+        return ($otpVerified && $newOtpToken === $dbData['otpToken']);
     }
 
     public function login()

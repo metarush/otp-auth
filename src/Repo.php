@@ -66,4 +66,26 @@ class Repo
 
         $this->mapper->update($this->cfg->getTable(), $data, $where);
     }
+
+    /**
+     * Get OTP hash and OTP token in Db
+     *
+     * Returns an array with keys:
+     * - otpHash
+     * - otpToken
+     *
+     * @param string $username
+     * @return array
+     */
+    public function getOtpHashAndToken(string $username): array
+    {
+        $where = [$this->cfg->getUsernameColumn() => $username];
+
+        $row = $this->mapper->findOne($this->cfg->getTable(), $where);
+
+        return [
+            'otpHash'  => $row[$this->cfg->getOtpHashColumn()],
+            'otpToken' => $row[$this->cfg->getOtpTokenColumn()]
+        ];
+    }
 }

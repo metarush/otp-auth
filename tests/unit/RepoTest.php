@@ -63,13 +63,13 @@ class RepoTest extends TestCase
 
     public function tearDown()
     {
-        // close the DB connections so unlink will work
-        unset($this->repo);
-        unset($this->mapper);
-        unset($this->pdo);
+          // close the DB connections so unlink will work
+          unset($this->repo);
+          unset($this->mapper);
+          unset($this->pdo);
 
-        if (file_exists($this->dbFile))
-            unlink($this->dbFile);
+          if (file_exists($this->dbFile))
+          unlink($this->dbFile);
     }
 
     public function seedTestData()
@@ -87,9 +87,9 @@ class RepoTest extends TestCase
 
     public function testUserExist()
     {
-        $r = $this->repo->userExist('foo');
+        $exist = $this->repo->userExist('foo');
 
-        $this->assertTrue($r);
+        $this->assertTrue($exist);
     }
 
     public function testGetEmail()
@@ -113,5 +113,21 @@ class RepoTest extends TestCase
 
         $this->assertEquals($otpHash, $row['otpHash']);
         $this->assertEquals($otpToken, $row['otpToken']);
+    }
+
+    public function testGetOtpHashAndToken()
+    {
+        $otpHash = '123';
+        $otpToken = 'abc';
+        $username = 'foo';
+
+        // seed data first
+        $this->repo->setOtpHashAndToken($otpHash, $otpToken, $username);
+
+        // then check
+        $arr = $this->repo->getOtpHashAndToken($username);
+
+        $this->assertEquals($otpHash, $arr['otpHash']);
+        $this->assertEquals($otpToken, $arr['otpToken']);
     }
 }
