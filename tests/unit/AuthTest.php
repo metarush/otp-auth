@@ -106,8 +106,28 @@ class AuthTest extends TestCase
 
     public function testSendOtp()
     {
-        $this->otpAuth->sendOtp('foo@example.com');
+        $otp = $this->otpAuth->generateToken();
+
+        $this->otpAuth->sendOtp($otp, 'foo@example.com');
 
         $this->assertTrue(true);
     }
+    /*
+      public function testValidOtp()
+      {
+
+      $username = 'foo@example.com';
+
+      // seed data
+      $this->testSendOtp($username);
+
+      $where = [$this->cfg->getUsernameColumn() => $username];
+      $row = $this->mapper->findOne($this->table, $where);
+
+      $valid = $this->otpAuth->validOtp(, $username);
+
+      $this->assertTrue($valid);
+      }
+     *
+     */
 }

@@ -18,7 +18,8 @@
     "require": {
         "php": ">=7.1",
         "metarush/data-mapper": "^1.0",
-        "phpmailer/phpmailer": "^6.0"
+        "phpmailer/phpmailer": "^6.0",
+        "aura/web": "^2.1"
     },
     "require-dev": {
         "vlucas/phpdotenv": "^3.1",

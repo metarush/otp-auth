@@ -6,11 +6,17 @@ class Auth
 {
     private $cfg;
     private $repo;
+    private $request;
+    private $response;
 
     public function __construct(Config $cfg, Repo $repo)
     {
         $this->cfg = $cfg;
         $this->repo = $repo;
+
+        $webFactory = new \Aura\Web\WebFactory($GLOBALS);
+        $this->request = $webFactory->newRequest();
+        $this->response = $webFactory->newResponse();
     }
 
     /**
@@ -25,29 +31,38 @@ class Auth
     }
 
     /**
-     * Send OTP to user via email
+     * Generate random token
      *
-     * @param string $username
-     * @return void
+     * @return string
      */
-    public function sendOtp(string $username): void
+    public function generateToken(): string
     {
-        $email = $this->repo->getEmail($username);
-
-        // generate OTP
-        $otp = Utils::randomToken(
+        return Utils::randomToken(
                 $this->cfg->getOtpLength(),
                 $this->cfg->getCharacterPool()
         );
+    }
+
+    /**
+     * Send OTP to user via email
+     *
+     * @param string $otp
+     * @param string $username
+     * @return void
+     */
+    public function sendOtp(string $otp, string $username): void
+    {
+        $email = $this->repo->getEmail($username);
 
         // set otpHash and otpToken in DB
         $otpHash = password_hash($otp, PASSWORD_DEFAULT);
-        $otpToken = base64_encode(random_bytes(9)); // outputs 12 chars
+        $otpToken = Utils::randomToken(12);
         $this->repo->setOtpHashAndToken($otpHash, $otpToken, $username);
 
         // set token in browser for later verification
-        $expires = time() + (60 * $this->cfg->getOtpExpire());
-        setcookie($this->cfg->getOtpCookieName(), $otpToken, $expires, '/');
+        $this->response->cookies->setPath('/');
+        $this->response->cookies->setExpire('+' . (60 * $this->cfg->getOtpExpire()));
+        $this->response->cookies->set($this->cfg->getOtpCookieName(), $otpToken);
 
         // send OTP to email
         $this->mailer($email, $otp);
@@ -90,7 +105,14 @@ class Auth
 
     public function validOtp(string $otp, string $username): bool
     {
+        $new = [
+            'otpHash'  => password_hash($otp, PASSWORD_DEFAULT),
+            'otpToken' => $this->request->cookies->get($this->cfg->getOtpCookieName())
+        ];
 
+        $old = $this->repo->getOtpHashAndToken($username);
+
+        return ($new['otpHash'] === $old['otpHash'] && $new['otpToken'] === $old['otpToken']);
     }
 
     public function login()
