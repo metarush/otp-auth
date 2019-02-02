@@ -21,7 +21,7 @@ class AuthTest extends TestCase
         // setup test db
         // ----------------------------------------------
 
-        $this->dbFile = __DIR__ . '/test.db';
+        $this->dbFile = __DIR__ . '/test-' . uniqid() . '.db';
         $this->table = 'Users';
 
         $dsn = 'sqlite:' . $this->dbFile;

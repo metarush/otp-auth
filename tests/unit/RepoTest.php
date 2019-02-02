@@ -20,7 +20,7 @@ class RepoTest extends TestCase
         // setup test db
         // ----------------------------------------------
 
-        $this->dbFile = __DIR__ . '/test.db';
+        $this->dbFile = __DIR__ . '/test-' . uniqid() . '.db';
         $this->table = 'Users';
 
         $dsn = 'sqlite:' . $this->dbFile;
@@ -45,9 +45,9 @@ class RepoTest extends TestCase
         // init Repo
         // ----------------------------------------------
 
-        $this->mapper = new DataMapper\DataMapper(
-            new DataMapper\Adapters\AtlasQuery($dsn, null, null)
-        );
+        $this->mapper = (new DataMapper\Builder)
+            ->setDsn($dsn)
+            ->build();
 
         $this->seedTestData();
 
@@ -63,13 +63,13 @@ class RepoTest extends TestCase
 
     public function tearDown()
     {
-          // close the DB connections so unlink will work
-          unset($this->repo);
-          unset($this->mapper);
-          unset($this->pdo);
+        // close the DB connections so unlink will work
+        unset($this->repo);
+        unset($this->mapper);
+        unset($this->pdo);
 
-          if (file_exists($this->dbFile))
-          unlink($this->dbFile);
+        if (file_exists($this->dbFile))
+            unlink($this->dbFile);
     }
 
     public function seedTestData()
