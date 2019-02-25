@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MetaRush\OtpAuth;
 
 use MetaRush\DataMapper;
@@ -37,7 +39,7 @@ class Repo
     public function getEmail(string $username): ?string
     {
         if (!$this->userExist($username))
-            throw new \Error('User does not exist');
+            throw new \Error('User ' . $username . ' does not exist');
 
         $where = [$this->cfg->getUsernameColumn() => $username];
 

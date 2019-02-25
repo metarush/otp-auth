@@ -7,3 +7,4 @@ public/
 resources/docker/
 nbproject/
 .env
+tests/emailFallbackCache/

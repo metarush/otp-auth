@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL);
+declare(strict_types=1);
 
 use \PHPUnit\Framework\TestCase;
 use \MetaRush\OtpAuth;

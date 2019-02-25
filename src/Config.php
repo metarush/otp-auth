@@ -1,14 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MetaRush\OtpAuth;
 
-class Config
+class Config extends \MetaRush\EmailFallback\Config
 {
-    private $smtpHost;
-    private $smtpUser;
-    private $smtpPass;
-    private $smtpEncr;
-    private $smtpPort;
+    private $smtpServers;
     private $fromName;
     private $fromEmail;
     private $subject = "Here's your OTP";
@@ -18,30 +16,34 @@ class Config
     private $emailColumn;
     private $otpHashColumn;
     private $otpTokenColumn;
-    private $otpCookieName = 'MROA';
     private $otpExpire = 5;
     private $otpLength = 8;
+    private $cookiePrefix = 'MROA_';
     private $characterPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     /**
-     * Get OTP cookie name
+     * Return an array of SmtpServer objects
      *
-     * @return string
+     * @return array
      */
-    public function getOtpCookieName(): string
+    public function getSmtpServers(): array
     {
-        return $this->otpCookieName;
+        return $this->smtpServers;
     }
 
     /**
-     * Set OTP cookie name
+     * Set an array of SmtpServer objects
      *
-     * @param string $otpCookieName
+     * @param array $smtpServers
      * @return $this
      */
-    public function setOtpCookieName(string $otpCookieName)
+    public function setSmtpServers(array $smtpServers)
     {
-        $this->otpCookieName = $otpCookieName;
+        foreach ($smtpServers as $server)
+            if (!$server instanceof SmtpServer)
+                throw new Error('Parameter of ' . __METHOD__ . ' must be an array with elements consisting of SmtpServer objects');
+
+        $this->smtpServers = $smtpServers;
 
         return $this;
     }
@@ -72,9 +74,9 @@ class Config
     /**
      * Get OTP expiration in minutes
      *
-     * @return string
+     * @return int
      */
-    public function getOtpExpire(): string
+    public function getOtpExpire(): int
     {
         return $this->otpExpire;
     }
@@ -82,10 +84,10 @@ class Config
     /**
      * Set OTP expiration in minutes
      *
-     * @param string $otpExpire
+     * @param int $otpExpire
      * @return $this
      */
-    public function setOtpExpire(string $otpExpire)
+    public function setOtpExpire(int $otpExpire)
     {
         $this->otpExpire = $otpExpire;
 
@@ -113,121 +115,6 @@ class Config
     public function setOtpHashColumn(string $otpHashColumn)
     {
         $this->otpHashColumn = $otpHashColumn;
-
-        return $this;
-    }
-
-    /**
-     * Get SMTP host
-     *
-     * @return string
-     */
-    public function getSmtpHost(): string
-    {
-        return $this->smtpHost;
-    }
-
-    /**
-     * Set SMTP host
-     *
-     * @param string $smtpHost
-     * @return $this
-     */
-    public function setSmtpHost(string $smtpHost)
-    {
-        $this->smtpHost = $smtpHost;
-
-        return $this;
-    }
-
-    /**
-     * Get SMTP username
-     *
-     * @return string
-     */
-    public function getSmtpUser(): string
-    {
-        return $this->smtpUser;
-    }
-
-    /**
-     * Set SMTP username
-     *
-     * @param string $smtpUser
-     * @return $this
-     */
-    public function setSmtpUser(string $smtpUser)
-    {
-        $this->smtpUser = $smtpUser;
-
-        return $this;
-    }
-
-    /**
-     * Get SMTP password
-     *
-     * @return string
-     */
-    public function getSmtpPass(): string
-    {
-        return $this->smtpPass;
-    }
-
-    /**
-     * Set SMTP password
-     *
-     * @param string $smtpPass
-     * @return $this
-     */
-    public function setSmtpPass(string $smtpPass)
-    {
-        $this->smtpPass = $smtpPass;
-
-        return $this;
-    }
-
-    /**
-     * Get SMTP encryption protocol
-     *
-     * @return string|null
-     */
-    public function getSmtpEncr(): ?string
-    {
-        return $this->smtpEncr;
-    }
-
-    /**
-     * Set SMTP encryption protocol e.g., TLS, SSL
-     *
-     * @param string|null $smtpEncr
-     * @return $this
-     */
-    public function setSmtpEncr(?string $smtpEncr)
-    {
-        $this->smtpEncr = $smtpEncr;
-
-        return $this;
-    }
-
-    /**
-     * Get SMTP port
-     *
-     * @return int
-     */
-    public function getSmtpPort(): int
-    {
-        return $this->smtpPort;
-    }
-
-    /**
-     * Set SMTP port
-     *
-     * @param int $smtpPort
-     * @return $this
-     */
-    public function setSmtpPort(int $smtpPort)
-    {
-        $this->smtpPort = $smtpPort;
 
         return $this;
     }
@@ -412,6 +299,29 @@ class Config
     public function setOtpLength(int $otpLength)
     {
         $this->otpLength = $otpLength;
+
+        return $this;
+    }
+
+    /**
+     * Get cookie name prefix used by metarush/otp-auth
+     *
+     * @return string
+     */
+    public function getCookiePrefix(): string
+    {
+        return $this->cookiePrefix;
+    }
+
+    /**
+     * Set cookie name prefix used by metarush/otp-auth
+     *
+     * @param string $cookiePrefix
+     * @return $this
+     */
+    public function setCookiePrefix(string $cookiePrefix)
+    {
+        $this->cookiePrefix = $cookiePrefix;
 
         return $this;
     }

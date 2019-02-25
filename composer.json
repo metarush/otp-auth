@@ -2,7 +2,7 @@
     "name": "metarush/otp-auth",
     "type": "library",
     "description": "Authentication library using one-time passwords (via email token)",
-    "keywords": ["php", "authentication", "auth", "one-time password", "login"],
+    "keywords": ["php", "authentication", "auth", "one-time password", "login", "email token"],
     "license": "MIT",
     "authors": [
         {
@@ -18,8 +18,8 @@
     "require": {
         "php": ">=7.1",
         "metarush/data-mapper": "^1.0",
-        "phpmailer/phpmailer": "^6.0",
-        "aura/web": "^2.1"
+        "aura/web": "^2.1",
+        "metarush/email-fallback": "^1.0"
     },
     "require-dev": {
         "vlucas/phpdotenv": "^3.1",
