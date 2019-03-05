@@ -139,10 +139,10 @@ class Auth
      *
      * @param string $otp
      * @param string $username
-     * @param string $testOtpToken Optional param used for testing
+     * @param string|null $testOtpToken Optional, for testing
      * @return bool
      */
-    public function validOtp(string $otp, string $username, string $testOtpToken = null): bool
+    public function validOtp(string $otp, string $username, ?string $testOtpToken = null): bool
     {
         $dbData = $this->repo->getOtpHashAndToken($username);
 
@@ -153,10 +153,26 @@ class Auth
         return ($otpVerified && $newOtpToken === $dbData['otpToken']);
     }
 
+    /**
+     * Login user as authenticated
+     *
+     * @param array $userData Optional arbitrary user data, e.g., userId, email
+     * @return void
+     */
     public function login(?array $userData = []): void
     {
         $this->sesAuth->set(self::AUTHENTICATED_VAR, true);
         $this->sesAuth->set(self::USER_DATA_VAR, $userData);
+    }
+
+    /**
+     * Check if user is authenticated
+     *
+     * @return bool
+     */
+    public function authenticated(): bool
+    {
+        $this->sesAuth->get(self::AUTHENTICATED_VAR, false);
     }
 
     public function remember()
