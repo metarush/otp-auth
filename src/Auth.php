@@ -8,6 +8,8 @@ class Auth
 {
     const OTP_TOKEN_COOKIE_NAME = 'otpToken';
     const LAST_SMTP_SERVER_COOKIE_NAME = 'lastSmtpServer';
+    const AUTHENTICATED_VAR = 'authenticated';
+    const USER_DATA_VAR = 'userData';
     private $cfg;
     private $repo;
     private $request;
@@ -151,9 +153,10 @@ class Auth
         return ($otpVerified && $newOtpToken === $dbData['otpToken']);
     }
 
-    public function login(): void
+    public function login(?array $userData = []): void
     {
-        $this->sesAuth->set('username', $username);
+        $this->sesAuth->set(self::AUTHENTICATED_VAR, true);
+        $this->sesAuth->set(self::USER_DATA_VAR, $userData);
     }
 
     public function remember()
