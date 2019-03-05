@@ -172,7 +172,17 @@ class Auth
      */
     public function authenticated(): bool
     {
-        $this->sesAuth->get(self::AUTHENTICATED_VAR, false);
+        return $this->sesAuth->get(self::AUTHENTICATED_VAR, false);
+    }
+
+    /**
+     * Returns userData if set
+     *
+     * @return array
+     */
+    public function userData(): array
+    {
+        return $this->sesAuth->get(self::USER_DATA_VAR, []);
     }
 
     public function remember()
