@@ -12,6 +12,8 @@ class Auth
     private $repo;
     private $request;
     private $response;
+    private $session;
+    private $sesAuth;
 
     public function __construct(Config $cfg, Repo $repo)
     {
@@ -21,6 +23,9 @@ class Auth
         $webFactory = new \Aura\Web\WebFactory($GLOBALS);
         $this->request = $webFactory->newRequest();
         $this->response = $webFactory->newResponse();
+
+        $this->session = (new \Aura\Session\SessionFactory)->newInstance($_COOKIE);
+        $this->sesAuth = $this->session->getSegment(__NAMESPACE__ . 'AUTH');
     }
 
     /**
@@ -146,9 +151,9 @@ class Auth
         return ($otpVerified && $newOtpToken === $dbData['otpToken']);
     }
 
-    public function login()
+    public function login(): void
     {
-
+        $this->sesAuth->set('username', $username);
     }
 
     public function remember()
