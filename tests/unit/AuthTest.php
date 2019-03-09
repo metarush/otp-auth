@@ -235,13 +235,31 @@ class AuthTest extends TestCase
 
     public function testRemember()
     {
-        $username = $_ENV['MROA_TEST_USER_EMAIL'];
+        $this->otpAuth->remember($this->testUserEmail);
 
-        $this->otpAuth->remember($username);
-
-        $row = $this->mapper->findOne($this->table, [$this->cfg->getUsernameColumn() => $username]);
+        $row = $this->mapper->findOne($this->table, [$this->cfg->getUsernameColumn() => $this->testUserEmail]);
 
         $this->assertNotNull($row[$this->cfg->getRememberHashColumn()]);
         $this->assertNotNull($row[$this->cfg->getRememberTokenColumn()]);
+    }
+
+    public function testRemembered()
+    {
+        // seed data
+        $token = OtpAuth\Utils::randomToken(OtpAuth\Auth::REMEMBER_TOKEN_LENGTH);
+        $validator = OtpAuth\Utils::randomToken(OtpAuth\Auth::REMEMBER_HASH_LENGTH);
+        $hash = password_hash($validator, PASSWORD_DEFAULT);
+
+        $data = [
+            $this->cfg->getRememberTokenColumn() => $token,
+            $this->cfg->getRememberHashColumn()  => $hash
+        ];
+
+        $this->mapper->create($this->table, $data);
+
+        // test
+        $remembered = $this->otpAuth->remembered($token . $validator);
+
+        $this->assertTrue($remembered);
     }
 }

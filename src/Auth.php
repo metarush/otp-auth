@@ -11,6 +11,8 @@ class Auth
     const AUTHENTICATED_VAR = 'authenticated';
     const USER_DATA_VAR = 'userData';
     const REMEMBER_COOKIE_NAME = 'remember';
+    const REMEMBER_TOKEN_LENGTH = 12;
+    const REMEMBER_HASH_LENGTH = 24;
     private $cfg;
     private $repo;
     private $request;
@@ -193,10 +195,10 @@ class Auth
      * @param int $howLong
      * @return void
      */
-    public function remember($username, int $howLong = null): void
+    public function remember(string $username, int $howLong = null): void
     {
-        $token = Utils::randomToken(12);
-        $validator = Utils::randomToken(24);
+        $token = Utils::randomToken(self::REMEMBER_TOKEN_LENGTH);
+        $validator = Utils::randomToken(self::REMEMBER_HASH_LENGTH);
         $hash = password_hash($validator, PASSWORD_DEFAULT);
 
         $this->repo->setRememberMeHashAndToken($hash, $token, $username);
@@ -206,6 +208,40 @@ class Auth
         $this->response->cookies->set($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME,
                                       $token . $validator,
                                       $howLong);
+    }
+
+    /**
+     * Get "remember me" cookie
+     *
+     * @return string|null
+     */
+    private function getRememberMeCookie(): ?string
+    {
+        return $this->request->cookies->get($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME, null);
+    }
+
+    /**
+     * Check if user is remembered in the browser
+     *
+     * @param string|null $testCookie
+     * @return bool
+     */
+    public function remembered(?string $testCookie = null): bool
+    {
+        $cookie = $testCookie ?? $this->getRememberMeCookie();
+
+        if (!$cookie)
+            return false;
+
+        // get cookie data
+        $token = substr($cookie, 0, self::REMEMBER_TOKEN_LENGTH);
+        $validator = substr($cookie, self::REMEMBER_TOKEN_LENGTH);
+
+        // get db data
+        $dbData = $this->repo->getRememberMeHashAndToken($token);
+        $dbHash = $dbData[$this->cfg->getRememberHashColumn()];
+
+        return password_verify($validator, $dbHash);
     }
 
     public function logout()

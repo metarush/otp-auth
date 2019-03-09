@@ -147,4 +147,20 @@ class RepoTest extends TestCase
         $this->assertEquals($hash, $row[$this->cfg->getRememberHashColumn()]);
         $this->assertEquals($token, $row[$this->cfg->getRememberTokenColumn()]);
     }
+
+    public function testGetRememberMeHashAndToken()
+    {
+        $hash = '123';
+        $token = 'abc';
+        $username = 'foo';
+
+        // seed data
+        $this->repo->setRememberMeHashAndToken($hash, $token, $username);
+
+        // then check
+        $arr = $this->repo->getRememberMeHashAndToken($token);
+
+        $this->assertEquals($hash, $arr[$this->cfg->getRememberHashColumn()]);
+        $this->assertEquals($token, $arr[$this->cfg->getRememberTokenColumn()]);
+    }
 }

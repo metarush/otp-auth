@@ -92,7 +92,7 @@ class Repo
     }
 
     /**
-     * Set "remember me" hash and OTP token in Db
+     * Set "remember me" hash and token in Db
      *
      * @param string $hash
      * @param string $token
@@ -109,5 +109,23 @@ class Repo
         $where = [$this->cfg->getUsernameColumn() => $username];
 
         $this->mapper->update($this->cfg->getTable(), $data, $where);
+    }
+
+    /**
+     * Get "remember me" hash and token in Db
+     *
+     * @param string $token
+     * @return array
+     */
+    public function getRememberMeHashAndToken(string $token): array
+    {
+        $where = [$this->cfg->getRememberTokenColumn() => $token];
+
+        $row = $this->mapper->findOne($this->cfg->getTable(), $where);
+
+        return [
+            $this->cfg->getRememberHashColumn()  => $row[$this->cfg->getRememberHashColumn()],
+            $this->cfg->getRememberTokenColumn() => $row[$this->cfg->getRememberTokenColumn()]
+        ];
     }
 }
