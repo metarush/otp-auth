@@ -48,10 +48,13 @@ class AuthTest extends TestCase
 
             $this->pdo->query('
                 CREATE TABLE `' . $this->table . '` (
-                `id`        INTEGER PRIMARY KEY AUTOINCREMENT,
-                `email`     TEXT,
-                `otpHash`   TEXT,
-                `otpToken`  TEXT
+                `id`            INTEGER PRIMARY KEY AUTOINCREMENT,
+                `username`      TEXT,
+                `email`         TEXT,
+                `otpHash`       TEXT,
+                `otpToken`      TEXT,
+                `rememberHash`  TEXT,
+                `rememberToken` TEXT
             )');
         }
 
@@ -228,5 +231,17 @@ class AuthTest extends TestCase
         $valid = $this->otpAuth->validOtp($this->otp, $username, $row[$this->cfg->getOtpTokenColumn()]);
 
         $this->assertTrue($valid);
+    }
+
+    public function testRemember()
+    {
+        $username = $_ENV['MROA_TEST_USER_EMAIL'];
+
+        $this->otpAuth->remember($username);
+
+        $row = $this->mapper->findOne($this->table, [$this->cfg->getUsernameColumn() => $username]);
+
+        $this->assertNotNull($row[$this->cfg->getRememberHashColumn()]);
+        $this->assertNotNull($row[$this->cfg->getRememberTokenColumn()]);
     }
 }

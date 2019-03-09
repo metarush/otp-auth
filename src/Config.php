@@ -6,20 +6,92 @@ namespace MetaRush\OtpAuth;
 
 class Config extends \MetaRush\EmailFallback\Config
 {
+    private $rememberHashColumn = 'rememberHash';
+    private $rememberTokenColumn = 'rememberToken';
+    private $rememberCookieExpire = 2592000; // 30 days
     private $smtpServers;
     private $fromName;
     private $fromEmail;
     private $subject = "Here's your OTP";
     private $body = "{OTP}\r\n\r\nNote: This OTP is valid for 5 minutes";
     private $table;
-    private $usernameColumn;
-    private $emailColumn;
-    private $otpHashColumn;
-    private $otpTokenColumn;
+    private $usernameColumn = 'username';
+    private $emailColumn = 'email';
+    private $otpHashColumn = 'otpHash';
+    private $otpTokenColumn = 'otpToken';
     private $otpExpire = 5;
     private $otpLength = 8;
     private $cookiePrefix = 'MROA_';
     private $characterPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    /**
+     * Get column name for "remember me" hash
+     *
+     * @return string
+     */
+    public function getRememberHashColumn(): string
+    {
+        return $this->rememberHashColumn;
+    }
+
+    /**
+     * Set column name for "remember me" hash
+     *
+     * @param string $rememberHashColumn
+     * @return $this
+     */
+    public function setRememberHashColumn(string $rememberHashColumn)
+    {
+        $this->rememberHashColumn = $rememberHashColumn;
+
+        return $this;
+    }
+
+    /**
+     * Get column name for lookup token for "remember me"
+     *
+     * @return string
+     */
+    public function getRememberTokenColumn(): string
+    {
+        return $this->rememberTokenColumn;
+    }
+
+    /**
+     *  Set column name for lookup token for "remember me"
+     *
+     * @param string $rememberLookupTokenColumn
+     * @return $this
+     */
+    public function setRememberTokenColumn(string $rememberTokenColumn)
+    {
+        $this->rememberTokenColumn = $rememberTokenColumn;
+
+        return $this;
+    }
+
+    /**
+     * Get how long "remember me" cookie in seconds
+     *
+     * @return int
+     */
+    public function getRememberCookieExpire(): int
+    {
+        return $this->rememberCookieExpire;
+    }
+
+    /**
+     * Set how long "remember me" cookie in seconds
+     *
+     * @param int $rememberCookieExpire
+     * @return $this
+     */
+    public function setRememberCookieExpire(int $rememberCookieExpire)
+    {
+        $this->rememberCookieExpire = $rememberCookieExpire;
+
+        return $this;
+    }
 
     /**
      * Return an array of SmtpServer objects

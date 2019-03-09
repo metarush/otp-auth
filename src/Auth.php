@@ -10,6 +10,7 @@ class Auth
     const LAST_SMTP_SERVER_COOKIE_NAME = 'lastSmtpServer';
     const AUTHENTICATED_VAR = 'authenticated';
     const USER_DATA_VAR = 'userData';
+    const REMEMBER_COOKIE_NAME = 'remember';
     private $cfg;
     private $repo;
     private $request;
@@ -176,7 +177,7 @@ class Auth
     }
 
     /**
-     * Returns userData if set
+     * Returns arbitrary user data, if set
      *
      * @return array
      */
@@ -185,9 +186,26 @@ class Auth
         return $this->sesAuth->get(self::USER_DATA_VAR, []);
     }
 
-    public function remember()
+    /**
+     * Remember username's login in browser
+     *
+     * @param type $username
+     * @param int $howLong
+     * @return void
+     */
+    public function remember($username, int $howLong = null): void
     {
+        $token = Utils::randomToken(12);
+        $validator = Utils::randomToken(24);
+        $hash = password_hash($validator, PASSWORD_DEFAULT);
 
+        $this->repo->setRememberMeHashAndToken($hash, $token, $username);
+
+        $howLong = $howLong ?? $this->cfg->getRememberCookieExpire();
+
+        $this->response->cookies->set($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME,
+                                      $token . $validator,
+                                      $howLong);
     }
 
     public function logout()

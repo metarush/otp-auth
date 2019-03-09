@@ -13,6 +13,7 @@ class RepoTest extends TestCase
     private $pdo;
     private $dbFile;
     private $repo;
+    private $cfg;
 
     public function setUp()
     {
@@ -33,11 +34,13 @@ class RepoTest extends TestCase
 
             $this->pdo->query('
                 CREATE TABLE `' . $this->table . '` (
-                `id`        INTEGER PRIMARY KEY AUTOINCREMENT,
-                `username`  TEXT,
-                `email`     TEXT,
-                `otpHash`   TEXT,
-                `otpToken`  TEXT
+                `id`            INTEGER PRIMARY KEY AUTOINCREMENT,
+                `username`      TEXT,
+                `email`         TEXT,
+                `otpHash`       TEXT,
+                `otpToken`      TEXT,
+                `rememberHash`  TEXT,
+                `rememberToken` TEXT
             )');
         }
 
@@ -51,14 +54,14 @@ class RepoTest extends TestCase
 
         $this->seedTestData();
 
-        $cfg = (new OtpAuth\Config())
+        $this->cfg = (new OtpAuth\Config())
             ->setTable($this->table)
             ->setUsernameColumn('username')
             ->setEmailColumn('email')
             ->setOtpHashColumn('otpHash')
             ->setOtpTokenColumn('otpToken');
 
-        $this->repo = new OtpAuth\Repo($cfg, $this->mapper);
+        $this->repo = new OtpAuth\Repo($this->cfg, $this->mapper);
     }
 
     public function tearDown()
@@ -109,10 +112,10 @@ class RepoTest extends TestCase
 
         $this->repo->setOtpHashAndToken($otpHash, $otpToken, $username);
 
-        $row = $this->mapper->findOne($this->table, ['username' => $username]);
+        $row = $this->mapper->findOne($this->table, [$this->cfg->getUsernameColumn() => $username]);
 
-        $this->assertEquals($otpHash, $row['otpHash']);
-        $this->assertEquals($otpToken, $row['otpToken']);
+        $this->assertEquals($otpHash, $row[$this->cfg->getOtpHashColumn()]);
+        $this->assertEquals($otpToken, $row[$this->cfg->getOtpTokenColumn()]);
     }
 
     public function testGetOtpHashAndToken()
@@ -127,7 +130,21 @@ class RepoTest extends TestCase
         // then check
         $arr = $this->repo->getOtpHashAndToken($username);
 
-        $this->assertEquals($otpHash, $arr['otpHash']);
-        $this->assertEquals($otpToken, $arr['otpToken']);
+        $this->assertEquals($otpHash, $arr[$this->cfg->getOtpHashColumn()]);
+        $this->assertEquals($otpToken, $arr[$this->cfg->getOtpTokenColumn()]);
+    }
+
+    public function testSetRememberMeHashAndToken()
+    {
+        $hash = '123';
+        $token = 'abc';
+        $username = 'foo';
+
+        $this->repo->setRememberMeHashAndToken($hash, $token, $username);
+
+        $row = $this->mapper->findOne($this->table, [$this->cfg->getUsernameColumn() => $username]);
+
+        $this->assertEquals($hash, $row[$this->cfg->getRememberHashColumn()]);
+        $this->assertEquals($token, $row[$this->cfg->getRememberTokenColumn()]);
     }
 }
