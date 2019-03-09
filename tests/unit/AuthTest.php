@@ -246,8 +246,8 @@ class AuthTest extends TestCase
     public function testRemembered()
     {
         // seed data
-        $token = OtpAuth\Utils::randomToken(OtpAuth\Auth::REMEMBER_TOKEN_LENGTH);
-        $validator = OtpAuth\Utils::randomToken(OtpAuth\Auth::REMEMBER_HASH_LENGTH);
+        $token = OtpAuth\Utils::randomToken(OtpAuth\Auth::TOKEN_LENGTH);
+        $validator = OtpAuth\Utils::randomToken(OtpAuth\Auth::HASH_LENGTH);
         $hash = password_hash($validator, PASSWORD_DEFAULT);
 
         $data = [
