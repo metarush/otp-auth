@@ -11,8 +11,8 @@ class Auth
     const AUTHENTICATED_VAR = 'authenticated';
     const USER_DATA_VAR = 'userData';
     const REMEMBER_COOKIE_NAME = 'remember';
-    const REMEMBER_TOKEN_LENGTH = 12;
-    const REMEMBER_HASH_LENGTH = 24;
+    const TOKEN_LENGTH = 12;
+    const HASH_LENGTH = 24;
     private $cfg;
     private $repo;
     private $request;
@@ -47,12 +47,13 @@ class Auth
     /**
      * Generate random token
      *
+     * @param int $length
      * @return string
      */
-    public function generateToken(): string
+    public function generateToken(int $length): string
     {
         return Utils::randomToken(
-                $this->cfg->getOtpLength(),
+                $length,
                 $this->cfg->getCharacterPool()
         );
     }
@@ -72,7 +73,7 @@ class Auth
 
         // set otpHash and otpToken in DB
         $otpHash = password_hash($otp, PASSWORD_DEFAULT);
-        $otpToken = Utils::randomToken(12);
+        $otpToken = $this->generateToken(self::TOKEN_LENGTH);
         $this->repo->setOtpHashAndToken($otpHash, $otpToken, $username);
 
         // set token in browser for later verification
@@ -197,8 +198,8 @@ class Auth
      */
     public function remember(string $username, int $howLong = null): void
     {
-        $token = Utils::randomToken(self::REMEMBER_TOKEN_LENGTH);
-        $validator = Utils::randomToken(self::REMEMBER_HASH_LENGTH);
+        $token = $this->generateToken(self::TOKEN_LENGTH);
+        $validator = $this->generateToken(self::HASH_LENGTH);
         $hash = password_hash($validator, PASSWORD_DEFAULT);
 
         $this->repo->setRememberMeHashAndToken($hash, $token, $username);
@@ -234,8 +235,8 @@ class Auth
             return false;
 
         // get cookie data
-        $token = substr($cookie, 0, self::REMEMBER_TOKEN_LENGTH);
-        $validator = substr($cookie, self::REMEMBER_TOKEN_LENGTH);
+        $token = substr($cookie, 0, self::TOKEN_LENGTH);
+        $validator = substr($cookie, self::TOKEN_LENGTH);
 
         // get db data
         $dbData = $this->repo->getRememberMeHashAndToken($token);

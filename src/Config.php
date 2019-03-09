@@ -20,7 +20,6 @@ class Config extends \MetaRush\EmailFallback\Config
     private $otpHashColumn = 'otpHash';
     private $otpTokenColumn = 'otpToken';
     private $otpExpire = 5;
-    private $otpLength = 8;
     private $cookiePrefix = 'MROA_';
     private $characterPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -346,31 +345,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setTable(string $table)
     {
         $this->table = $table;
-
-        return $this;
-    }
-
-    /**
-     * Get OTP length
-     *
-     * @return int
-     */
-    public function getOtpLength(): int
-    {
-        return $this->otpLength;
-    }
-
-    /**
-     * Set OTP length
-     *
-     * Default: 8
-     *
-     * @param int $otpLength
-     * @return $this
-     */
-    public function setOtpLength(int $otpLength)
-    {
-        $this->otpLength = $otpLength;
 
         return $this;
     }

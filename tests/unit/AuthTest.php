@@ -109,7 +109,7 @@ class AuthTest extends TestCase
         // common vars
         // ----------------------------------------------
         $this->testUserEmail = $_ENV['MROA_TEST_USER_EMAIL'];
-        $this->otp = $this->otpAuth->generateToken();
+        $this->otp = $this->otpAuth->generateToken(8);
 
         // ----------------------------------------------
         // seed test data
