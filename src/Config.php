@@ -14,6 +14,9 @@ class Config extends \MetaRush\EmailFallback\Config
     private $fromEmail;
     private $subject = "Here's your OTP";
     private $body = "{OTP}\r\n\r\nNote: This OTP is valid for 5 minutes";
+    private $dsn;
+    private $dbUser = null;
+    private $dbPass = null;
     private $table;
     private $usernameColumn = 'username';
     private $emailColumn = 'email';
@@ -22,6 +25,75 @@ class Config extends \MetaRush\EmailFallback\Config
     private $otpExpire = 5;
     private $cookiePrefix = 'MROA_';
     private $characterPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    /**
+     * Get PDO DSN
+     *
+     * @return string
+     */
+    public function getDsn(): string
+    {
+        return $this->dsn;
+    }
+
+    /**
+     * Set PDO DSN
+     *
+     * @param string $dsn
+     * @return $this
+     */
+    public function setDsn(string $dsn)
+    {
+        $this->dsn = $dsn;
+
+        return $this;
+    }
+
+    /**
+     * Get DB username
+     *
+     * @return string|null
+     */
+    public function getDbUser(): ?string
+    {
+        return $this->dbUser;
+    }
+
+    /**
+     * Set DB username
+     *
+     * @param string|null $dbUser
+     * @return $this
+     */
+    public function setDbUser(?string $dbUser)
+    {
+        $this->dbUser = $dbUser;
+
+        return $this;
+    }
+
+    /**
+     * Get DB password
+     *
+     * @return string|null
+     */
+    public function getDbPass(): ?string
+    {
+        return $this->dbPass;
+    }
+
+    /**
+     * Set DB password
+     *
+     * @param string|null $dbPass
+     * @return $this
+     */
+    public function setDbPass(?string $dbPass)
+    {
+        $this->dbPass = $dbPass;
+
+        return $this;
+    }
 
     /**
      * Get column name for "remember me" hash
