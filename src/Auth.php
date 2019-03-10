@@ -245,8 +245,15 @@ class Auth
         return password_verify($validator, $dbHash);
     }
 
-    public function logout()
+    /**
+     * Logout user and remove "remember me" cookie
+     *
+     * @return void
+     */
+    public function logout(): void
     {
+        $this->session->clear();
 
+        $this->response->cookies->set($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME, null, -1);
     }
 }
