@@ -104,13 +104,13 @@ class RepoTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSetOtpHashAndToken()
+    public function testSetOtpData()
     {
         $otpHash = '123';
         $otpToken = 'abc';
         $username = 'foo';
 
-        $this->repo->setOtpHashAndToken($otpHash, $otpToken, $username);
+        $this->repo->setOtpData($otpHash, $otpToken, $username);
 
         $row = $this->mapper->findOne($this->table, [$this->cfg->getUsernameColumn() => $username]);
 
@@ -125,7 +125,7 @@ class RepoTest extends TestCase
         $username = 'foo';
 
         // seed data first
-        $this->repo->setOtpHashAndToken($otpHash, $otpToken, $username);
+        $this->repo->setOtpData($otpHash, $otpToken, $username);
 
         // then check
         $arr = $this->repo->getOtpHashAndToken($username);

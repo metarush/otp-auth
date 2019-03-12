@@ -74,7 +74,7 @@ class Auth
         // set otpHash and otpToken in DB
         $otpHash = password_hash($otp, PASSWORD_DEFAULT);
         $otpToken = $this->generateToken(self::TOKEN_LENGTH);
-        $this->repo->setOtpHashAndToken($otpHash, $otpToken, $username);
+        $this->repo->setOtpData($otpHash, $otpToken, $username);
 
         // set token in browser for later verification
         $expire = '+' . (60 * $this->cfg->getOtpExpire()) + time();

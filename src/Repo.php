@@ -57,7 +57,7 @@ class Repo
      * @param string $username
      * @return void
      */
-    public function setOtpHashAndToken(string $otpHash, string $otpToken, string $username): void
+    public function setOtpData(string $otpHash, string $otpToken, string $username): void
     {
         $data = [
             $this->cfg->getOtpHashColumn()   => $otpHash,
