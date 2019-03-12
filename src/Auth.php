@@ -164,6 +164,7 @@ class Auth
      */
     public function login(?array $userData = []): void
     {
+        $this->session->regenerateId();
         $this->sesAuth->set(self::AUTHENTICATED_VAR, true);
         $this->sesAuth->set(self::USER_DATA_VAR, $userData);
     }
