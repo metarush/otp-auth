@@ -118,7 +118,7 @@ class RepoTest extends TestCase
         $this->assertEquals($otpToken, $row[$this->cfg->getOtpTokenColumn()]);
     }
 
-    public function testGetOtpHashAndToken()
+    public function testGetOtpData()
     {
         $otpHash = '123';
         $otpToken = 'abc';
@@ -128,7 +128,7 @@ class RepoTest extends TestCase
         $this->repo->setOtpData($otpHash, $otpToken, $username);
 
         // then check
-        $arr = $this->repo->getOtpHashAndToken($username);
+        $arr = $this->repo->getOtpData($username);
 
         $this->assertEquals($otpHash, $arr[$this->cfg->getOtpHashColumn()]);
         $this->assertEquals($otpToken, $arr[$this->cfg->getOtpTokenColumn()]);

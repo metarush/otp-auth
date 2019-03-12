@@ -148,7 +148,7 @@ class Auth
     public function validOtp(string $otp, string $username, ?string $testOtpToken = null): bool
     {
         // check if OTP is not yet expired
-        $dbData = $this->repo->getOtpHashAndToken($username);
+        $dbData = $this->repo->getOtpData($username);
         $diff = (time() - $dbData[$this->cfg->getOtpExpireColumn()]) / 60;
         if ($diff >= $this->cfg->getOtpExpire())
             return false;

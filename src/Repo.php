@@ -80,7 +80,7 @@ class Repo
      * @param string $username
      * @return array
      */
-    public function getOtpHashAndToken(string $username): array
+    public function getOtpData(string $username): array
     {
         $where = [$this->cfg->getUsernameColumn() => $username];
 
