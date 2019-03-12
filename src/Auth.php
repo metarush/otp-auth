@@ -147,10 +147,16 @@ class Auth
      */
     public function validOtp(string $otp, string $username, ?string $testOtpToken = null): bool
     {
+        // check if OTP is not yet expired
         $dbData = $this->repo->getOtpHashAndToken($username);
+        $diff = (time() - $dbData[$this->cfg->getOtpExpireColumn()]) / 60;
+        if ($diff >= $this->cfg->getOtpExpire())
+            return false;
 
+        // check if OTP is correct
         $otpVerified = password_verify($otp, $dbData['otpHash']);
 
+        // check if OTP cookie token is valid
         $newOtpToken = $testOtpToken ?? $this->request->cookies->get($this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME);
 
         return ($otpVerified && $newOtpToken === $dbData['otpToken']);

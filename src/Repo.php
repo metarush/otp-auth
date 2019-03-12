@@ -60,8 +60,9 @@ class Repo
     public function setOtpHashAndToken(string $otpHash, string $otpToken, string $username): void
     {
         $data = [
-            $this->cfg->getOtpHashColumn()  => $otpHash,
-            $this->cfg->getOtpTokenColumn() => $otpToken
+            $this->cfg->getOtpHashColumn()   => $otpHash,
+            $this->cfg->getOtpTokenColumn()  => $otpToken,
+            $this->cfg->getOtpExpireColumn() => time() + ($this->cfg->getOtpExpire() * 60)
         ];
 
         $where = [$this->cfg->getUsernameColumn() => $username];
@@ -86,8 +87,9 @@ class Repo
         $row = $this->mapper->findOne($this->cfg->getTable(), $where);
 
         return [
-            'otpHash'  => $row[$this->cfg->getOtpHashColumn()],
-            'otpToken' => $row[$this->cfg->getOtpTokenColumn()]
+            $this->cfg->getOtpHashColumn()   => $row[$this->cfg->getOtpHashColumn()],
+            $this->cfg->getOtpTokenColumn()  => $row[$this->cfg->getOtpTokenColumn()],
+            $this->cfg->getOtpExpireColumn() => $row[$this->cfg->getOtpExpireColumn()]
         ];
     }
 

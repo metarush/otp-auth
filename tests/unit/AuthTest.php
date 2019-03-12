@@ -53,6 +53,7 @@ class AuthTest extends TestCase
                 `email`         TEXT,
                 `otpHash`       TEXT,
                 `otpToken`      TEXT,
+                `otpExpire`     INTEGER,
                 `rememberHash`  TEXT,
                 `rememberToken` TEXT
             )');
@@ -228,9 +229,16 @@ class AuthTest extends TestCase
         $where = [$this->cfg->getUsernameColumn() => $username];
         $row = $this->mapper->findOne($this->table, $where);
 
+        // test normal valid otp
         $valid = $this->otpAuth->validOtp($this->otp, $username, $row[$this->cfg->getOtpTokenColumn()]);
-
         $this->assertTrue($valid);
+
+        // deliberately expire otp
+        $data = [$this->cfg->getOtpExpireColumn() => time() - (10 * 60)];
+        $this->mapper->update($this->table, $data, $where);
+        $row = $this->mapper->findOne($this->table, $where);
+        $valid = $this->otpAuth->validOtp($this->otp, $username, $row[$this->cfg->getOtpTokenColumn()]);
+        $this->assertFalse($valid);
     }
 
     public function testRemember()

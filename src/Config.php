@@ -22,6 +22,7 @@ class Config extends \MetaRush\EmailFallback\Config
     private $emailColumn = 'email';
     private $otpHashColumn = 'otpHash';
     private $otpTokenColumn = 'otpToken';
+    private $otpExpireColumn = 'otpExpire';
     private $otpExpire = 5;
     private $cookiePrefix = 'MROA_';
     private $characterPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -258,6 +259,29 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setOtpHashColumn(string $otpHashColumn)
     {
         $this->otpHashColumn = $otpHashColumn;
+
+        return $this;
+    }
+
+    /**
+     * Get the name of table column where OTP expire is stored
+     *
+     * @return string
+     */
+    public function getOtpExpireColumn(): string
+    {
+        return $this->otpExpireColumn;
+    }
+
+    /**
+     * Set the name of table column where OTP expire is stored
+     *
+     * @param string $otpExpireColumn
+     * @return $this
+     */
+    public function setOtpExpireColumn(string $otpExpireColumn)
+    {
+        $this->otpExpireColumn = $otpExpireColumn;
 
         return $this;
     }
