@@ -26,4 +26,14 @@ class Builder extends Config
 
         return new Auth($this, $repo);
     }
+
+    /**
+     * Return an instance of EmailFallback\Server class
+     *
+     * @return \MetaRush\EmailFallback\Server
+     */
+    public function SmtpServer(): SmtpServer
+    {
+        return new SmtpServer;
+    }
 }
