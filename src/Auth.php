@@ -77,9 +77,8 @@ class Auth
         $this->repo->setOtpHashAndToken($otpHash, $otpToken, $username);
 
         // set token in browser for later verification
-        $this->response->cookies->setPath('/');
-        $this->response->cookies->setExpire('+' . (60 * $this->cfg->getOtpExpire()));
-        $this->response->cookies->set($this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME, $otpToken);
+        $expire = '+' . (60 * $this->cfg->getOtpExpire()) + time();
+        setcookie($this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME, $otpToken, $expire);
 
         // send OTP to email
         $this->otpMailer($otp, $email, $useNextSmtpHost, $testLastServerKey);
@@ -135,7 +134,7 @@ class Auth
 
         // if multiple smtp hosts are set, track last smtp host used
         if (count($this->cfg->getSmtpServers()) > 1)
-            $this->response->cookies->set($cookieName, $serverKey);
+            setcookie($cookieName, (string) $serverKey);
     }
 
     /**
@@ -206,9 +205,9 @@ class Auth
 
         $howLong = $howLong ?? $this->cfg->getRememberCookieExpire();
 
-        $this->response->cookies->set($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME,
-                                      $token . $validator,
-                                      $howLong);
+        setcookie($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME,
+                  $token . $validator,
+                  $howLong);
     }
 
     /**
@@ -252,8 +251,8 @@ class Auth
      */
     public function logout(): void
     {
-        $this->session->clear();
+        $this->session->destroy();
 
-        $this->response->cookies->set($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME, null, -1);
+        setcookie($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME, '', -1);
     }
 }
