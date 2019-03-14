@@ -64,7 +64,7 @@ class Auth
      * @param string $otp
      * @param string $username
      * @param bool $useNextSmtpHost
-     * @param int $testLastServerKey
+     * @param int $testLastServerKey Optional param used for testing. Emulates last SMTP server used.
      * @return void
      */
     public function sendOtp(string $otp, string $username, bool $useNextSmtpHost = false, int $testLastServerKey = null): void
@@ -90,7 +90,7 @@ class Auth
      * @param string $otp
      * @param string $email
      * @param bool $useNextSmtpHost
-     * @param int $testLastServerKey Optional param used for testing
+     * @param int $testLastServerKey Optional param used for testing. Emulates last SMTP server used.
      * @return void
      * @throws Error
      * @throws Exception
@@ -142,7 +142,7 @@ class Auth
      *
      * @param string $otp
      * @param string $username
-     * @param string|null $testOtpToken Optional, for testing
+     * @param string|null $testOtpToken Optional, for testing. Emulates cookie token.
      * @return bool
      */
     public function validOtp(string $otp, string $username, ?string $testOtpToken = null): bool
@@ -186,7 +186,7 @@ class Auth
     }
 
     /**
-     * Returns arbitrary user data, if set
+     * Returns arbitrary user data, if set via login() param
      *
      * @return array
      */
