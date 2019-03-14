@@ -17,7 +17,7 @@ class Config extends \MetaRush\EmailFallback\Config
     private $dsn;
     private $dbUser = null;
     private $dbPass = null;
-    private $table;
+    private $table = 'users';
     private $usernameColumn = 'username';
     private $emailColumn = 'email';
     private $otpHashColumn = 'otpHash';
