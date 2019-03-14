@@ -130,4 +130,19 @@ class Repo
             $this->cfg->getRememberTokenColumn() => $row[$this->cfg->getRememberTokenColumn()]
         ];
     }
+
+    /**
+     * Get username from remember me cookie token
+     *
+     * @param string $token
+     * @return string
+     */
+    public function getUsernameFromRememberToken(string $token): string
+    {
+        $where = [$this->cfg->getRememberTokenColumn() => $token];
+
+        $row = $this->mapper->findOne($this->cfg->getTable(), $where);
+
+        return $row[$this->cfg->getUsernameColumn()];
+    }
 }

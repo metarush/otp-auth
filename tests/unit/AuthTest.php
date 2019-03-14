@@ -251,14 +251,16 @@ class AuthTest extends TestCase
         $this->assertNotNull($row[$this->cfg->getRememberTokenColumn()]);
     }
 
-    public function testRemembered()
+    public function testRememberedUsername()
     {
         // seed data
+        $username = 'foo';
         $token = OtpAuth\Utils::randomToken(OtpAuth\Auth::TOKEN_LENGTH);
         $validator = OtpAuth\Utils::randomToken(OtpAuth\Auth::HASH_LENGTH);
         $hash = password_hash($validator, PASSWORD_DEFAULT);
 
         $data = [
+            $this->cfg->getUsernameColumn()      => $username,
             $this->cfg->getRememberTokenColumn() => $token,
             $this->cfg->getRememberHashColumn()  => $hash
         ];
@@ -266,8 +268,8 @@ class AuthTest extends TestCase
         $this->mapper->create($this->table, $data);
 
         // test
-        $remembered = $this->otpAuth->remembered($token . $validator);
+        $dbUsername = $this->otpAuth->rememberedUsername($token . $validator);
 
-        $this->assertTrue($remembered);
+        $this->assertEquals($username, $dbUsername);
     }
 }

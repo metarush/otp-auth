@@ -228,19 +228,19 @@ class Auth
     }
 
     /**
-     * Check if user is remembered in the browser
+     * Get remembered username (via cookie) if any
      *
-     * @param string|null $testCookie
-     * @return bool
+     * @param string|null $cookie
+     * @return string|null
      */
-    public function remembered(?string $testCookie = null): bool
+    public function rememberedUsername(?string $cookie = null): ?string
     {
-        $cookie = $testCookie ?? $this->getRememberMeCookie();
+        $cookie = $cookie ?? $this->getRememberMeCookie();
 
         if (!$cookie)
-            return false;
+            return null;
 
-        // get cookie data
+        // parse cookie data
         $token = substr($cookie, 0, self::TOKEN_LENGTH);
         $validator = substr($cookie, self::TOKEN_LENGTH);
 
@@ -248,7 +248,10 @@ class Auth
         $dbData = $this->repo->getRememberMeHashAndToken($token);
         $dbHash = $dbData[$this->cfg->getRememberHashColumn()];
 
-        return password_verify($validator, $dbHash);
+        if (!password_verify($validator, $dbHash))
+            return null;
+
+        return $this->repo->getUsernameFromRememberToken($token);
     }
 
     /**

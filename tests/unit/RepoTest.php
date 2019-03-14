@@ -163,4 +163,22 @@ class RepoTest extends TestCase
         $this->assertEquals($hash, $arr[$this->cfg->getRememberHashColumn()]);
         $this->assertEquals($token, $arr[$this->cfg->getRememberTokenColumn()]);
     }
+
+    public function testGetUsernameFromRememberToken()
+    {
+        $token = 'abc';
+        $username = 'foo';
+
+        $data = [
+            $this->cfg->getUsernameColumn()      => $username,
+            $this->cfg->getRememberTokenColumn() => $token
+        ];
+
+        // seed data
+        $this->mapper->create($this->table, $data);
+
+        $dbUsername = $this->repo->getUsernameFromRememberToken($token);
+
+        $this->assertEquals($username, $dbUsername);
+    }
 }
