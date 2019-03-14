@@ -214,7 +214,7 @@ class Auth
 
         setcookie($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME,
                   $token . $validator,
-                  $howLong);
+                  '+' . $howLong + time());
     }
 
     /**
