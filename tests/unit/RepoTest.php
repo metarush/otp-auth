@@ -39,6 +39,7 @@ class RepoTest extends TestCase
                 `email`         TEXT,
                 `otpHash`       TEXT,
                 `otpToken`      TEXT,
+                `otpExpire`     TEXT,
                 `rememberHash`  TEXT,
                 `rememberToken` TEXT
             )');
