@@ -80,7 +80,7 @@ if (!$auth->authenticated()) {
 }
 ```
 
-###login.php
+### login.php
 
 Create a `login.php` file and put the ff.
 
