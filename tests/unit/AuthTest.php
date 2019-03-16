@@ -7,9 +7,10 @@ use \MetaRush\OtpAuth;
 use \MetaRush\DataMapper;
 
 /**
- * You must run the test one by one because PhpFastCache doesn't work for
+ * You must run the tests one by one because PhpFastCache doesn't work on
  * "too fast" tests. E.g.,
- *  vendor/bin/phpunit tests/unit/AuthTest.php --filter testName
+ * vendor/bin/phpunit tests/unit/AuthTest.php --filter testName --stderr
+ * Also, include the --stderr flag so tests with cookies will not error
  */
 class AuthTest extends TestCase
 {
