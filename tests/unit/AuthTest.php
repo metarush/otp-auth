@@ -7,7 +7,8 @@ use \MetaRush\OtpAuth;
 use \MetaRush\DataMapper;
 
 /**
- * You must run the tests one by one because PhpFastCache doesn't work on
+ * Note: Don't remove the @runInSeparateProcess annottation in methods or else
+ * you must run the tests one by one because PhpFastCache doesn't work on
  * "too fast" tests. E.g.,
  * vendor/bin/phpunit tests/unit/AuthTest.php --filter testName --stderr
  * Also, include the --stderr flag so tests with cookies will not error
@@ -147,6 +148,9 @@ class AuthTest extends TestCase
         $this->assertTrue($userExist);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testSendOtpRegular()
     {
         $this->otpAuth->sendOtp($this->otp, $this->testUserEmail);
@@ -154,6 +158,9 @@ class AuthTest extends TestCase
         $this->assertTrue(true);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testSendOtpUsingOneFailedSmtpHost()
     {
         $smtpServers = [
@@ -178,6 +185,9 @@ class AuthTest extends TestCase
         $this->assertTrue(true);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testSendOtpUsingAllFailedSmtpHost()
     {
         $smtpServers = [
@@ -203,7 +213,9 @@ class AuthTest extends TestCase
     }
 
     /**
-     * This should send emails using 2 different SMTP hosts.
+     * This should send emails using 2 different SMTP hosts
+     *
+     * @runInSeparateProcess
      */
     public function testSendOtpUsingNextHostFlag()
     {
@@ -220,6 +232,9 @@ class AuthTest extends TestCase
         $this->assertTrue(true);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testValidOtp()
     {
         $username = $this->testUserEmail;
@@ -242,6 +257,9 @@ class AuthTest extends TestCase
         $this->assertFalse($valid);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testRemember()
     {
         $this->otpAuth->remember($this->testUserEmail);
@@ -252,6 +270,9 @@ class AuthTest extends TestCase
         $this->assertNotNull($row[$this->cfg->getRememberTokenColumn()]);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testRememberedUsername()
     {
         // seed data
