@@ -90,7 +90,7 @@ class AuthTest extends TestCase
 
         $this->cfg = (new OtpAuth\Config())
             ->setAppName('MROATester')
-            ->setAdminEmail($_ENV['MROA_ADMIN_EMAIL'])
+            ->setAdminEmails([$_ENV['MROA_ADMIN_EMAIL']])
             ->setFromEmail('sender@example.com')
             ->setTable($this->table)
             ->setUsernameColumn('email')
@@ -98,7 +98,7 @@ class AuthTest extends TestCase
             ->setOtpHashColumn('otpHash')
             ->setOtpTokenColumn('otpToken')
             ->setNotificationFromEmail('noreply@example.com')
-            ->setSmtpServers($smtpServers)
+            ->setServers($smtpServers)
             ->setRoundRobinMode(true)
             ->setRoundRobinDriver('files')
             ->setRoundRobinDriverConfig($driverConfig);
@@ -129,6 +129,8 @@ class AuthTest extends TestCase
 
         if (file_exists($this->dbFile))
             unlink($this->dbFile);
+
+        sleep(3);
     }
 
     public function seedTestData()
@@ -178,7 +180,7 @@ class AuthTest extends TestCase
                 ->setEncr($_ENV['MROA_SMTP_ENCR_0'])
         ];
 
-        $this->cfg->setSmtpServers($smtpServers);
+        $this->cfg->setServers($smtpServers);
 
         $this->otpAuth->sendOtp($this->otp, $this->testUserEmail);
 
@@ -205,7 +207,7 @@ class AuthTest extends TestCase
                 ->setEncr('AnotherdeliberateInvalidHost'),
         ];
 
-        $this->cfg->setSmtpServers($smtpServers);
+        $this->cfg->setServers($smtpServers);
 
         $this->expectException(OtpAuth\Exception::class);
 

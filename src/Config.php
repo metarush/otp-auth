@@ -9,9 +9,6 @@ class Config extends \MetaRush\EmailFallback\Config
     private $rememberHashColumn = 'rememberHash';
     private $rememberTokenColumn = 'rememberToken';
     private $rememberCookieExpire = 2592000; // 30 days
-    private $smtpServers;
-    private $fromName;
-    private $fromEmail;
     private $subject = "Here's your OTP";
     private $body = "{OTP}\r\n\r\nNote: This OTP is valid for 5 minutes";
     private $dsn;
@@ -132,7 +129,7 @@ class Config extends \MetaRush\EmailFallback\Config
     /**
      *  Set column name for lookup token for "remember me"
      *
-     * @param string $rememberLookupTokenColumn
+     * @param string $rememberTokenColumn
      * @return $this
      */
     public function setRememberTokenColumn(string $rememberTokenColumn)
@@ -161,33 +158,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setRememberCookieExpire(int $rememberCookieExpire)
     {
         $this->rememberCookieExpire = $rememberCookieExpire;
-
-        return $this;
-    }
-
-    /**
-     * Return an array of SmtpServer objects
-     *
-     * @return array
-     */
-    public function getSmtpServers(): array
-    {
-        return $this->smtpServers;
-    }
-
-    /**
-     * Set an array of SmtpServer objects
-     *
-     * @param array $smtpServers
-     * @return $this
-     */
-    public function setSmtpServers(array $smtpServers)
-    {
-        foreach ($smtpServers as $server)
-            if (!$server instanceof SmtpServer)
-                throw new Error('Parameter of ' . __METHOD__ . ' must be an array with elements consisting of SmtpServer objects');
-
-        $this->smtpServers = $smtpServers;
 
         return $this;
     }
@@ -282,51 +252,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setOtpExpireColumn(string $otpExpireColumn)
     {
         $this->otpExpireColumn = $otpExpireColumn;
-
-        return $this;
-    }
-
-    /**
-     * Get the From Name of the OTP message
-     *
-     * @return string|null
-     */
-    public function getFromName(): ?string
-    {
-        return $this->fromName;
-    }
-
-    /**
-     * Set the From Name of the OTP message
-     *
-     * @param string $fromName
-     * @return $this
-     */
-    public function setFromName(string $fromName)
-    {
-        $this->fromName = $fromName;
-        return $this;
-    }
-
-    /**
-     * Get the From Email of the OTP message
-     *
-     * @return string
-     */
-    public function getFromEmail(): string
-    {
-        return $this->fromEmail;
-    }
-
-    /**
-     * Set the From Email of the OTP message
-     *
-     * @param string $fromEmail
-     * @return $this
-     */
-    public function setFromEmail(string $fromEmail)
-    {
-        $this->fromEmail = $fromEmail;
 
         return $this;
     }

@@ -89,6 +89,9 @@ class RepoTest extends TestCase
             $this->mapper->create($this->table, $v);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testUserExist()
     {
         $exist = $this->repo->userExist('foo');
@@ -96,6 +99,9 @@ class RepoTest extends TestCase
         $this->assertTrue($exist);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetEmail()
     {
         $expected = 'foo@example.com';
@@ -105,6 +111,9 @@ class RepoTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testSetOtpData()
     {
         $otpHash = '123';
@@ -119,6 +128,9 @@ class RepoTest extends TestCase
         $this->assertEquals($otpToken, $row[$this->cfg->getOtpTokenColumn()]);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetOtpData()
     {
         $otpHash = '123';
@@ -135,6 +147,9 @@ class RepoTest extends TestCase
         $this->assertEquals($otpToken, $arr[$this->cfg->getOtpTokenColumn()]);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testSetRememberMeHashAndToken()
     {
         $hash = '123';
@@ -149,6 +164,9 @@ class RepoTest extends TestCase
         $this->assertEquals($token, $row[$this->cfg->getRememberTokenColumn()]);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetRememberMeHashAndToken()
     {
         $hash = '123';
@@ -165,6 +183,9 @@ class RepoTest extends TestCase
         $this->assertEquals($token, $arr[$this->cfg->getRememberTokenColumn()]);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetUsernameFromRememberToken()
     {
         $token = 'abc';

@@ -1,5 +1,4 @@
-Note: This documentation is applicable for `v2` only.
-For older documentation, refer to `READMEv(n).md`.
+Note: This documentation is applicable for `v1` only.
 
 ---
 
@@ -15,11 +14,11 @@ Install via composer as `metarush/otp-auth`
 
 In addition to your usual `username` and/or `email` column, create the ff. columns in your users table.
 
+- `rememberHash` TEXT (255)
+- `rememberToken` TEXT (12)
 - `otpHash` TEXT (255)
 - `otpToken` TEXT(12)
 - `otpExpire` INT (10)
-- `rememberHash` TEXT (255)
-- `rememberToken` TEXT (12)
 
 Note: You can use other column names if you want, just set them in the config.
 
@@ -62,9 +61,9 @@ You can add as many as you like, the lib will failover to each automatically.
 
 ```php
 $auth = $builder->setDsn('mysql:host=localhost;dbname=foo')
-    ->setServers($smtpServers)
-    ->setAdminEmails(['admin@example.com'])
+    ->setAdminEmail('admin@example.com')
     ->setAppName('foo')
+    ->setSmtpServers($smtpServers)
     ->setFromEmail('noreply@example.com')
     ->setUsernameColumn('email')
     ->setNotificationFromEmail('noreply@example.com')
@@ -195,9 +194,9 @@ $auth->logout();
 
 You can use the ff. methods in the builder object, before the `->build();` method
 
-#### `setAdminEmails(array);`
+#### `setAdminEmail(string);`
 
-Array of admin emails that will get error notifications
+Admin email if you want to get error notifications
 
 #### `setAppName(string);`
 
@@ -293,7 +292,7 @@ Table column name for lookup token for "remember me" cookie
 
 Default: `rememberToken`
 
-#### `setServers(array);`
+#### `setSmtpServers(array);`
 
 Array of `SmtpServer` objects. See above sample "Define SMTP servers"
 

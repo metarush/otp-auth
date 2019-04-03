@@ -100,21 +100,20 @@ class Auth
         if (!filter_var($email, FILTER_VALIDATE_EMAIL))
             throw new Error('Email appears to be invalid: ' . $email);
 
-        $mailer = (new \MetaRush\EmailFallback\Builder($this->cfg->getSmtpServers()))
-            ->setAdminEmail($this->cfg->getAdminEmail())
+        $mailer = (new \MetaRush\EmailFallback\Builder)
+            ->setServers($this->cfg->getServers())
+            ->setFromEmail($this->cfg->getFromEmail())
+            ->setFromName($this->cfg->getFromName())
+            ->setAdminEmails($this->cfg->getAdminEmails())
             ->setAppName($this->cfg->getAppName())
             ->setNotificationFromEmail($this->cfg->getNotificationFromEmail())
             ->setRoundRobinMode($this->cfg->getRoundRobinMode())
             ->setRoundRobinDriver($this->cfg->getRoundRobinDriver())
             ->setRoundRobinDriverConfig($this->cfg->getRoundRobinDriverConfig())
+            ->setTos([$email])
+            ->setSubject($this->cfg->getSubject())
+            ->setBody(str_replace('{OTP}', $otp, $this->cfg->getBody()))
             ->build();
-
-        $fromName = $this->cfg->getFromName() ?? $this->cfg->getFromEmail();
-        $mailer->setFrom($this->cfg->getFromEmail(), $fromName);
-        $mailer->addAddress($email);
-
-        $mailer->Subject = $this->cfg->getSubject();
-        $mailer->Body = str_replace('{OTP}', $otp, $this->cfg->getBody());
 
         $cookieName = $this->cfg->getCookiePrefix() . self::LAST_SMTP_SERVER_COOKIE_NAME;
 
@@ -133,7 +132,7 @@ class Auth
         }
 
         // if multiple smtp hosts are set, track last smtp host used
-        if (count($this->cfg->getSmtpServers()) > 1)
+        if (count($this->cfg->getServers()) > 1)
             setcookie($cookieName, (string) $serverKey);
     }
 
