@@ -276,5 +276,10 @@ class Auth
                   '',
                   -1,
                   $this->cfg->getCookiePath());
+
+        setcookie($this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME,
+                  '',
+                  -1,
+                  $this->cfg->getCookiePath());
     }
 }
