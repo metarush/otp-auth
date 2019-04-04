@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.0.2
+
+- Make Repo::getRememberMeHashAndToken() return null instead of empty array if hash/token is not found
+- Remove OTP cookie upon logout
+
 ## 2.0.1
 
 - Add cookie path config setting
