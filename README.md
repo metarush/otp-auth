@@ -221,6 +221,12 @@ Cookie name prefix used by `metarush/otp-auth`
 
 Default: `MROA_`
 
+#### `setCookiePath(?string);`
+
+Cookie path used by `metarush/otp-auth`
+
+Default: `/`
+
 #### `setDbPass(string);`
 
 DB password of your users table

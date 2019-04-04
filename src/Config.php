@@ -22,6 +22,7 @@ class Config extends \MetaRush\EmailFallback\Config
     private $otpExpireColumn = 'otpExpire';
     private $otpExpire = 5;
     private $cookiePrefix = 'MROA_';
+    private $cookiePath = '/';
     private $characterPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     /**
@@ -43,7 +44,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setDsn(string $dsn)
     {
         $this->dsn = $dsn;
-
         return $this;
     }
 
@@ -66,7 +66,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setDbUser(?string $dbUser)
     {
         $this->dbUser = $dbUser;
-
         return $this;
     }
 
@@ -89,7 +88,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setDbPass(?string $dbPass)
     {
         $this->dbPass = $dbPass;
-
         return $this;
     }
 
@@ -112,7 +110,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setRememberHashColumn(string $rememberHashColumn)
     {
         $this->rememberHashColumn = $rememberHashColumn;
-
         return $this;
     }
 
@@ -135,7 +132,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setRememberTokenColumn(string $rememberTokenColumn)
     {
         $this->rememberTokenColumn = $rememberTokenColumn;
-
         return $this;
     }
 
@@ -158,7 +154,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setRememberCookieExpire(int $rememberCookieExpire)
     {
         $this->rememberCookieExpire = $rememberCookieExpire;
-
         return $this;
     }
 
@@ -181,7 +176,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setOtpTokenColumn(string $otpTokenColumn)
     {
         $this->otpTokenColumn = $otpTokenColumn;
-
         return $this;
     }
 
@@ -204,7 +198,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setOtpExpire(int $otpExpire)
     {
         $this->otpExpire = $otpExpire;
-
         return $this;
     }
 
@@ -229,7 +222,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setOtpHashColumn(string $otpHashColumn)
     {
         $this->otpHashColumn = $otpHashColumn;
-
         return $this;
     }
 
@@ -252,7 +244,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setOtpExpireColumn(string $otpExpireColumn)
     {
         $this->otpExpireColumn = $otpExpireColumn;
-
         return $this;
     }
 
@@ -275,7 +266,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setSubject(string $subject)
     {
         $this->subject = $subject;
-
         return $this;
     }
 
@@ -320,7 +310,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setEmailColumn(string $emailColumn)
     {
         $this->emailColumn = $emailColumn;
-
         return $this;
     }
 
@@ -343,7 +332,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setUsernameColumn(string $usernameColumn)
     {
         $this->usernameColumn = $usernameColumn;
-
         return $this;
     }
 
@@ -366,7 +354,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setTable(string $table)
     {
         $this->table = $table;
-
         return $this;
     }
 
@@ -389,7 +376,28 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setCookiePrefix(string $cookiePrefix)
     {
         $this->cookiePrefix = $cookiePrefix;
+        return $this;
+    }
 
+    /**
+     * Get cookie path
+     *
+     * @return string|null
+     */
+    public function getCookiePath(): ?string
+    {
+        return $this->cookiePath;
+    }
+
+    /**
+     * Set cookie path
+     *
+     * @param string|null $cookiePath
+     * @return $this
+     */
+    public function setCookiePath(?string $cookiePath)
+    {
+        $this->cookiePath = $cookiePath;
         return $this;
     }
 
@@ -414,7 +422,6 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setCharacterPool(string $characterPool)
     {
         $this->characterPool = $characterPool;
-
         return $this;
     }
 }

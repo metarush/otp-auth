@@ -78,7 +78,10 @@ class Auth
 
         // set token in browser for later verification
         $expire = '+' . (60 * $this->cfg->getOtpExpire()) + time();
-        setcookie($this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME, $otpToken, $expire);
+        setcookie($this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME,
+                  $otpToken,
+                  $expire,
+                  $this->cfg->getCookiePath());
 
         // send OTP to email
         $this->otpMailer($otp, $email, $useNextSmtpHost, $testLastServerKey);
@@ -133,7 +136,10 @@ class Auth
 
         // if multiple smtp hosts are set, track last smtp host used
         if (count($this->cfg->getServers()) > 1)
-            setcookie($cookieName, (string) $serverKey);
+            setcookie($cookieName,
+                      (string) $serverKey,
+                      0,
+                      $this->cfg->getCookiePath());
     }
 
     /**
@@ -213,7 +219,8 @@ class Auth
 
         setcookie($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME,
                   $token . $validator,
-                  '+' . $howLong + time());
+                  '+' . $howLong + time(),
+                  $this->cfg->getCookiePath());
     }
 
     /**
@@ -262,6 +269,9 @@ class Auth
     {
         $this->session->destroy();
 
-        setcookie($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME, '', -1);
+        setcookie($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME,
+                  '',
+                  -1,
+                  $this->cfg->getCookiePath());
     }
 }
