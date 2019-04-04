@@ -252,6 +252,9 @@ class Auth
 
         // get db data
         $dbData = $this->repo->getRememberMeHashAndToken($token);
+        if (!$dbData)
+            return null;
+
         $dbHash = $dbData[$this->cfg->getRememberHashColumn()];
 
         if (!password_verify($validator, $dbHash))

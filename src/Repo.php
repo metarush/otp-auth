@@ -117,13 +117,16 @@ class Repo
      * Get "remember me" hash and token in Db
      *
      * @param string $token
-     * @return array
+     * @return ?array
      */
-    public function getRememberMeHashAndToken(string $token): array
+    public function getRememberMeHashAndToken(string $token): ?array
     {
         $where = [$this->cfg->getRememberTokenColumn() => $token];
 
         $row = $this->mapper->findOne($this->cfg->getTable(), $where);
+
+        if (!$row)
+            return null;
 
         return [
             $this->cfg->getRememberHashColumn()  => $row[$this->cfg->getRememberHashColumn()],
