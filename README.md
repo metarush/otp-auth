@@ -73,7 +73,7 @@ $auth = $builder->setDsn('mysql:host=localhost;dbname=foo')
 ```
 
 Note: If you want to extend `Auth` class and still use the builder, you can pass
-your child class in the `build()` parameter as string. E.g. ->build('MyAuth');
+your child class in the `build()` parameter as string. E.g. `->build('MyAuth');`
 
 **Auto-login if username is remembered via cookie**
 
