@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.1.0
+
+- Make the Builder class work if a child class is extended from Auth class
+
 ## 2.0.2
 
 - Make Repo::getRememberMeHashAndToken() return null instead of empty array if hash/token is not found
