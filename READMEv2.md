@@ -1,4 +1,4 @@
-Note: This documentation is applicable for `v2` only.
+Note: This documentation is applicable for `v3` only.
 For older documentation, refer to `READMEv(n).md`.
 
 ---
@@ -71,9 +71,6 @@ $auth = $builder->setDsn('mysql:host=localhost;dbname=foo')
     ->setTable('users')
     ->build();
 ```
-
-Note: If you want to extend `Auth` class and still use the builder, you can pass
-your child class in the `build()` parameter as string. E.g. ->build('MyAuth');
 
 **Auto-login if username is remembered via cookie**
 

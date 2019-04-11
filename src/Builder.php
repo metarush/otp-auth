@@ -14,7 +14,7 @@ class Builder extends Config
      *
      * @return \MetaRush\OtpAuth\Auth
      */
-    public function build(): Auth
+    public function build(?string $childClass = null): Auth
     {
         $mapper = (new DataMapper\Builder)
             ->setDsn($this->getDsn())
@@ -23,6 +23,9 @@ class Builder extends Config
             ->build();
 
         $repo = new Repo($this, $mapper);
+
+        if ($childClass)
+            return new $childClass($this, $repo);
 
         return new Auth($this, $repo);
     }

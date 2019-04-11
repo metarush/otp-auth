@@ -1,5 +1,7 @@
 <?php
 
+require 'ChildClassSample.php';
+
 use MetaRush\OtpAuth;
 use PHPUnit\Framework\TestCase;
 
@@ -24,5 +26,18 @@ class BuilderTest extends TestCase
             ->build();
 
         $this->assertInstanceOf(OtpAuth\Auth::class, $otpAuth);
+    }
+
+    public function testChildClass()
+    {
+        $otpAuth = (new OtpAuth\Builder)
+            ->setDsn('sqlite:' . $this->dbFile)
+            ->build('ChildClassSample');
+
+        $this->assertInstanceOf(OtpAuth\Auth::class, $otpAuth);
+
+        $foo = $otpAuth->sampleChildMethod();
+
+        $this->assertEquals('foo', $foo);
     }
 }
