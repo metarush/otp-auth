@@ -178,10 +178,11 @@ class Auth
      */
     public function validOtp(string $otp, string $username, ?string $testOtpToken = null): bool
     {
-        // check if OTP is not yet expired
+        // get OTP data from DB
         $dbData = $this->repo->getOtpData($username);
-        $diff = (time() - $dbData[$this->cfg->getOtpExpireColumn()]) / 60;
-        if ($diff >= $this->cfg->getOtpExpire())
+
+        // check if OTP is expired
+        if ($this->timestampPassed((int) $dbData[$this->cfg->getOtpExpireColumn()]))
             return false;
 
         // check if OTP is correct
@@ -307,5 +308,31 @@ class Auth
                   '',
                   -1,
                   $this->cfg->getCookiePath());
+    }
+
+    /**
+     * Check if OTP is expired
+     *
+     * @param string $username
+     * @return bool
+     */
+    public function otpExpired(string $username): bool
+    {
+        $otpExpire = (int) $this->repo->getOtpData($username)[$this->cfg->getOtpExpireColumn()];
+
+        return $this->timestampPassed($otpExpire);
+    }
+
+    /**
+     * Check if unix $timestamp has already passed in the real world
+     *
+     * @param int $timestamp
+     * @return bool
+     */
+    private function timestampPassed(int $timestamp): bool
+    {
+        $diff = time() - $timestamp;
+
+        return ($diff >= 0);
     }
 }

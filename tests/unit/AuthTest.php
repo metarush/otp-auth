@@ -296,4 +296,36 @@ class AuthTest extends TestCase
 
         $this->assertEquals($username, $dbUsername);
     }
+
+    public function testOtpExpired()
+    {
+        $this->cfg->setOtpExpire(1);
+        $this->otpAuth->sendOtp('123', $this->testUserEmail);
+
+        $expired = $this->otpAuth->otpExpired($this->testUserEmail);
+        $this->assertFalse($expired);
+
+        // modify otp expiration to just 5 seconds so the test will be fast
+        $data = [
+            $this->cfg->getOtpExpireColumn() => time() + 5
+        ];
+
+        $where = [
+            $this->cfg->getUsernameColumn() => $this->testUserEmail
+        ];
+
+        $this->mapper->update($this->table, $data, $where);
+
+        // simulate elapsed time
+        sleep(4);
+
+        $expired = $this->otpAuth->otpExpired($this->testUserEmail);
+        $this->assertFalse($expired);
+
+        // simulate elapsed time
+        sleep(5);
+
+        $expired = $this->otpAuth->otpExpired($this->testUserEmail);
+        $this->assertTrue($expired);
+    }
 }

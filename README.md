@@ -442,6 +442,12 @@ Validate OTP
 
 `$username` Username associated with the OTP
 
+#### `otpExpired(string $username): bool`
+
+Check if OTP is expired
+
+`$username` Username associated with the OTP
+
 ## Brute-force protection
 
 We recommended using the [metarush/firewall](https://github.com/metarush/firewall) library for login brute-force protection.
