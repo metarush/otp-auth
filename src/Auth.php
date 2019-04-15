@@ -69,22 +69,48 @@ class Auth
      */
     public function sendOtp(string $otp, string $username, bool $useNextSmtpHost = false, int $testLastServerKey = null): void
     {
-        $email = $this->repo->getEmail($username);
+        // generate otpToken
+        $otpToken = $this->generateToken(self::TOKEN_LENGTH);
 
         // set otpHash and otpToken in DB
-        $otpHash = password_hash($otp, PASSWORD_DEFAULT);
-        $otpToken = $this->generateToken(self::TOKEN_LENGTH);
-        $this->repo->setOtpData($otpHash, $otpToken, $username);
+        $this->setOtpDataInDb($otp, $otpToken, $username);
 
         // set token in browser for later verification
+        $this->setOtpTokenCookie($otpToken);
+
+        $email = $this->repo->getEmail($username);
+
+        // send OTP to email
+        $this->otpMailer($otp, $email, $useNextSmtpHost, $testLastServerKey);
+    }
+
+    /**
+     * Set token in browser for later verification
+     *
+     * @param string $otpToken
+     * @return void
+     */
+    private function setOtpTokenCookie(string $otpToken): void
+    {
         $expire = '+' . (60 * $this->cfg->getOtpExpire()) + time();
         setcookie($this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME,
                   $otpToken,
                   $expire,
                   $this->cfg->getCookiePath());
+    }
 
-        // send OTP to email
-        $this->otpMailer($otp, $email, $useNextSmtpHost, $testLastServerKey);
+    /**
+     * Set otpHash and otpToken in DB
+     *
+     * @param string $otp
+     * @param string $otpToken
+     * @param string $username
+     * @return void
+     */
+    private function setOtpDataInDb(string $otp, string $otpToken, string $username): void
+    {
+        $otpHash = password_hash($otp, PASSWORD_DEFAULT);
+        $this->repo->setOtpData($otpHash, $otpToken, $username);
     }
 
     /**
