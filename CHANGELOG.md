@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.3.0
+
+- Add userId() service method.
+
 ## 2.2.0
 
 - Add otpExpired() service method.

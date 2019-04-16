@@ -153,6 +153,7 @@ if ($_POST) {
 
     // login username
     $auth->login([
+        'userId' => $auth->userId($username),
         'username' => $username
     ]);
 
@@ -324,6 +325,12 @@ Table column name where username is stored
 
 Default: `username`
 
+#### `setUserIdColumn(string);`
+
+Table column name where userId is stored
+
+Default: `id`
+
 
 ### SMTP round-robin mode
 
@@ -447,6 +454,12 @@ Validate OTP
 Check if OTP is expired
 
 `$username` Username associated with the OTP
+
+#### `userId(string $username): int`
+
+Returns the userId of `$username`
+
+`$username` Username to get userId
 
 ## Brute-force protection
 

@@ -15,6 +15,7 @@ class Config extends \MetaRush\EmailFallback\Config
     private $dbUser = null;
     private $dbPass = null;
     private $table = 'users';
+    private $userIdColumn = 'id';
     private $usernameColumn = 'username';
     private $emailColumn = 'email';
     private $otpHashColumn = 'otpHash';
@@ -288,6 +289,28 @@ class Config extends \MetaRush\EmailFallback\Config
     public function setBody(string $body)
     {
         $this->body = $body;
+        return $this;
+    }
+
+    /**
+     * Get the name of table column where userId is stored
+     * 
+     * @return string
+     */
+    public function getUserIdColumn(): string
+    {
+        return $this->userIdColumn;
+    }
+
+    /**
+     * Set the name of table column where userId is stored
+     *
+     * @param string $userIdColumn
+     * @return $this
+     */
+    public function setUserIdColumn(string $userIdColumn)
+    {
+        $this->userIdColumn = $userIdColumn;
         return $this;
     }
 

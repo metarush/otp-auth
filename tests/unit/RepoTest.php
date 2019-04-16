@@ -203,4 +203,26 @@ class RepoTest extends TestCase
 
         $this->assertEquals($username, $dbUsername);
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testUserId()
+    {
+        $username = 'bar';
+        $data = [$this->cfg->getUsernameColumn() => $username];
+        // seed data
+        $this->mapper->create($this->table, $data);
+        $actual = $this->repo->userId($username);
+        $expected = 2;
+        $this->assertEquals($expected, $actual);
+
+        $username = 'qux';
+        $data = [$this->cfg->getUsernameColumn() => $username];
+        // seed data
+        $this->mapper->create($this->table, $data);
+        $actual = $this->repo->userId($username);
+        $expected = 3;
+        $this->assertEquals($expected, $actual);
+    }
 }

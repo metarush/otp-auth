@@ -297,6 +297,9 @@ class AuthTest extends TestCase
         $this->assertEquals($username, $dbUsername);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testOtpExpired()
     {
         $this->cfg->setOtpExpire(1);
@@ -327,5 +330,19 @@ class AuthTest extends TestCase
 
         $expired = $this->otpAuth->otpExpired($this->testUserEmail);
         $this->assertTrue($expired);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testUserId()
+    {
+        $username = 'bar@example.com';
+        $data = [$this->cfg->getUsernameColumn() => $username];
+        // seed data
+        $this->mapper->create($this->table, $data);
+        $actual = $this->otpAuth->userId($username);
+        $expected = 2;
+        $this->assertEquals($expected, $actual);
     }
 }

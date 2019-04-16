@@ -148,4 +148,19 @@ class Repo
 
         return $row[$this->cfg->getUsernameColumn()];
     }
+
+    /**
+     * Get userId of $username
+     *
+     * @param string $username
+     * @return int
+     */
+    public function userId(string $username): int
+    {
+        $where = [$this->cfg->getUsernameColumn() => $username];
+
+        $row = $this->mapper->findOne($this->cfg->getTable(), $where);
+
+        return (int) $row[$this->cfg->getUserIdColumn()];
+    }
 }

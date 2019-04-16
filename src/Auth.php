@@ -335,4 +335,15 @@ class Auth
 
         return ($diff >= 0);
     }
+
+    /**
+     * Get userId of $username
+     *
+     * @param string $username
+     * @return int
+     */
+    public function userId(string $username): int
+    {
+        return $this->repo->userId($username);
+    }
 }
