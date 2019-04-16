@@ -10,6 +10,7 @@ class Auth
     const LAST_SMTP_SERVER_COOKIE_NAME = 'lastSmtpServer';
     const AUTHENTICATED_VAR = 'authenticated';
     const USER_DATA_VAR = 'userData';
+    const USERNAME_VAR = 'username';
     const REMEMBER_COOKIE_NAME = 'remember';
     const TOKEN_LENGTH = 12;
     const HASH_LENGTH = 24;
@@ -197,13 +198,16 @@ class Auth
     /**
      * Login user as authenticated
      *
+     * @param string $username
      * @param array $userData Optional arbitrary user data, e.g., userId, email
      * @return void
      */
-    public function login(?array $userData = []): void
+    public function login(string $username, ?array $userData = []): void
     {
         $this->sesAuth->set(self::AUTHENTICATED_VAR, true);
+        $this->sesAuth->set(self::USERNAME_VAR, $username);
         $this->sesAuth->set(self::USER_DATA_VAR, $userData);
+
         $this->session->regenerateId();
     }
 
@@ -337,13 +341,15 @@ class Auth
     }
 
     /**
-     * Get userId of $username
+     * Get userId of currently logged user or of $username if set
      *
-     * @param string $username
+     * @param string|null $username
      * @return int
      */
-    public function userId(string $username): int
+    public function userId(?string $username = null): int
     {
+        $username = $username ?? $this->sesAuth->get(self::USERNAME_VAR);
+
         return $this->repo->userId($username);
     }
 }

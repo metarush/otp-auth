@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 3.0.0
+
+- Make $username parameter optional for userId() service method.
+- Require $username parameter in login() service method.
+
 ## 2.3.0
 
 - Add userId() service method.

@@ -1,4 +1,4 @@
-Note: This documentation is applicable for `v3` only.
+Note: This documentation is applicable for `v2` only.
 For older documentation, refer to `READMEv(n).md`.
 
 ---
@@ -80,8 +80,11 @@ your child class in the `build()` parameter as string. E.g. `->build('MyAuth');`
 ```php
 if (!$auth->authenticated()) {
     $rememberedUsername = $auth->rememberedUsername();
-    if (null !== $rememberedUsername)
-        $auth->login($rememberedUsername);
+    if (null !== $rememberedUsername) {
+        $auth->login([
+            'username' => $rememberedUsername
+        ]);
+    }
 }
 ```
 
@@ -149,7 +152,10 @@ if ($_POST) {
         exit('Invalid OTP');
 
     // login username
-    $auth->login($username);
+    $auth->login([
+        'userId' => $auth->userId($username),
+        'username' => $username
+    ]);
 
     echo 'OTP is valid';
     // redirect to your restricted page
@@ -391,13 +397,11 @@ Check if user is authenticated
 
 Generate random token
 
-#### `login(string $username, ?array $userData = []): void`
+#### `login(?array $userData = []): void`
 
 Log in user as authenticated
 
-`$username` Username to login
-
-`$userData` Optional arbitrary user data defined by you, e.g., firstName, email
+`$userData` Optional arbitrary user data defined by you, e.g., userId, email
 
 #### `logout(): void`
 
