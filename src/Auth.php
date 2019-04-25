@@ -6,12 +6,12 @@ namespace MetaRush\OtpAuth;
 
 class Auth
 {
-    const OTP_TOKEN_COOKIE_NAME = 'otpToken';
-    const LAST_SMTP_SERVER_COOKIE_NAME = 'lastSmtpServer';
-    const AUTHENTICATED_VAR = 'authenticated';
-    const USER_DATA_VAR = 'userData';
-    const USERNAME_VAR = 'username';
-    const REMEMBER_COOKIE_NAME = 'remember';
+    const OTP_TOKEN_COOKIE_NAME = 'otpTkn';
+    const LAST_SMTP_SERVER_COOKIE_NAME = 'lstSmtpSrvr';
+    const AUTHENTICATED_VAR = 'athntctd';
+    const USER_DATA_VAR = 'usrDta';
+    const USERNAME_VAR = 'usrnme';
+    const REMEMBER_COOKIE_NAME = 'rmmbr';
     const TOKEN_LENGTH = 12;
     const HASH_LENGTH = 24;
     private $cfg;
@@ -31,7 +31,7 @@ class Auth
         $this->response = $webFactory->newResponse();
 
         $this->session = (new \Aura\Session\SessionFactory)->newInstance($_COOKIE);
-        $this->sesAuth = $this->session->getSegment(__NAMESPACE__ . 'AUTH');
+        $this->sesAuth = $this->session->getSegment('MROA');
     }
 
     /**
