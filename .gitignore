@@ -2,9 +2,11 @@ composer.phar
 composer.lock
 phpunit.xml
 phpunit.php
+.phpunit.result.cache
 vendor/
 public/
-resources/docker/
+resources/
 nbproject/
+tests/mycoverage/
 .env
 tests/unit/emailFallbackCache/
