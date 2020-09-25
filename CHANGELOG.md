@@ -1,10 +1,20 @@
 # CHANGELOG
 
+## 4.0.0 - 2020-09-26
+
+### Changed
+
+- Upgrade metarush/email-fallback to v4.
+
+### Fix
+
+- Fix unparenthesized expressions which may cause warnings in PHP 8
+
 ## 3.0.1 - 2019-04-25
 
-### Added
+### Fix
 
-- Shorten cookie/session names to save space in case user uses cookie session handler
+- Shorten cookie/session names to save space in case user uses cookie session handler.
 
 ## 3.0.0 - 2019-04-17
 

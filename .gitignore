@@ -10,3 +10,4 @@ nbproject/
 tests/mycoverage/
 .env
 tests/unit/emailFallbackCache/
+error_log

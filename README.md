@@ -1,8 +1,3 @@
-Note: This documentation is applicable for `v3` only.
-For older documentation, refer to `READMEv(n).md`.
-
----
-
 # metarush/otp-auth
 
 Authenticate and log in your users using one-time passwords (OTP) via email.
@@ -45,13 +40,13 @@ $smtpServers = [
         ->setHost('host')
         ->setUser('user')
         ->setPass('pass')
-        ->setPort('465')
+        ->setPort(465)
         ->setEncr('TLS'),
     1 => $builder->SmtpServer()
         ->setHost('host2')
         ->setUser('user')
         ->setPass('pass')
-        ->setPort('465')
+        ->setPort(465)
         ->setEncr('TLS'),
     ];
 ```

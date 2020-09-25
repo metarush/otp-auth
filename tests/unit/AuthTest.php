@@ -66,7 +66,11 @@ class AuthTest extends TestCase
         // ----------------------------------------------
 
         $this->mapper = new DataMapper\DataMapper(
-            new DataMapper\Adapters\AtlasQuery($dsn, null, null)
+            new DataMapper\Adapters\AtlasQuery(
+                (new DataMapper\Config)
+                    ->setAdapter('AtlasQuery')
+                    ->setDsn($dsn)
+            )
         );
 
         $smtpServers = [
@@ -74,13 +78,13 @@ class AuthTest extends TestCase
                 ->setHost($_ENV['MROA_SMTP_HOST_0'])
                 ->setUser($_ENV['MROA_SMTP_USER_0'])
                 ->setPass($_ENV['MROA_SMTP_PASS_0'])
-                ->setPort($_ENV['MROA_SMTP_PORT_0'])
+                ->setPort((int) $_ENV['MROA_SMTP_PORT_0'])
                 ->setEncr($_ENV['MROA_SMTP_ENCR_0']),
             1 => (new OtpAuth\SmtpServer)
                 ->setHost($_ENV['MROA_SMTP_HOST_1'])
                 ->setUser($_ENV['MROA_SMTP_USER_1'])
                 ->setPass($_ENV['MROA_SMTP_PASS_1'])
-                ->setPort($_ENV['MROA_SMTP_PORT_1'])
+                ->setPort((int) $_ENV['MROA_SMTP_PORT_1'])
                 ->setEncr($_ENV['MROA_SMTP_ENCR_1'])
         ];
 
@@ -170,13 +174,13 @@ class AuthTest extends TestCase
                 ->setHost('deliberateInvalidHost')
                 ->setUser('deliberateInvalidHost')
                 ->setPass('deliberateInvalidHost')
-                ->setPort('123')
+                ->setPort(123)
                 ->setEncr('deliberateInvalidHost'),
             1 => (new OtpAuth\SmtpServer)
                 ->setHost($_ENV['MROA_SMTP_HOST_0'])
                 ->setUser($_ENV['MROA_SMTP_USER_0'])
                 ->setPass($_ENV['MROA_SMTP_PASS_0'])
-                ->setPort($_ENV['MROA_SMTP_PORT_0'])
+                ->setPort((int) $_ENV['MROA_SMTP_PORT_0'])
                 ->setEncr($_ENV['MROA_SMTP_ENCR_0'])
         ];
 
@@ -197,13 +201,13 @@ class AuthTest extends TestCase
                 ->setHost('deliberateInvalidHost')
                 ->setUser('deliberateInvalidHost')
                 ->setPass('deliberateInvalidHost')
-                ->setPort('123')
+                ->setPort(123)
                 ->setEncr('deliberateInvalidHost'),
             1 => (new OtpAuth\SmtpServer)
                 ->setHost('AnotherdeliberateInvalidHost')
                 ->setUser('AnotherdeliberateInvalidHost')
                 ->setPass('AnotherdeliberateInvalidHost')
-                ->setPort('123')
+                ->setPort(123)
                 ->setEncr('AnotherdeliberateInvalidHost'),
         ];
 
@@ -345,4 +349,5 @@ class AuthTest extends TestCase
         $expected = 2;
         $this->assertEquals($expected, $actual);
     }
+
 }

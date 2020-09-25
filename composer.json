@@ -17,9 +17,9 @@
     },
     "require": {
         "php": ">=7.1",
-        "metarush/data-mapper": "^1.0",
+        "metarush/data-mapper": "^1",
         "aura/web": "^2.1",
-        "metarush/email-fallback": "^3",
+        "metarush/email-fallback": "^4",
         "aura/session": "^2.1"
     },
     "require-dev": {
