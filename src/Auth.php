@@ -93,7 +93,7 @@ class Auth
      */
     private function setOtpTokenCookie(string $otpToken): void
     {
-        $expire = '+' . ((60 * $this->cfg->getOtpExpire()) + time());
+        $expire = ((60 * $this->cfg->getOtpExpire()) + time());
         setcookie($this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME,
                   $otpToken,
                   $expire,
@@ -250,7 +250,7 @@ class Auth
 
         setcookie($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME,
                   $token . $validator,
-                  '+' . ($howLong + time()),
+                  ($howLong + time()),
                   $this->cfg->getCookiePath());
     }
 

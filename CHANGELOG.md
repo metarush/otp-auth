@@ -1,18 +1,24 @@
 # CHANGELOG
 
+## 4.0.1 - 2021-09-23
+
+### Fixed
+
+- Remove the '+' string prepended in the 3rd parameter of setcookie() function which may cause warnings in PHP 8
+
 ## 4.0.0 - 2020-09-26
 
 ### Changed
 
 - Upgrade metarush/email-fallback to v4.
 
-### Fix
+### Fixed
 
 - Fix unparenthesized expressions which may cause warnings in PHP 8
 
 ## 3.0.1 - 2019-04-25
 
-### Fix
+### Fixed
 
 - Shorten cookie/session names to save space in case user uses cookie session handler.
 
