@@ -14,10 +14,10 @@ class Auth
     const REMEMBER_COOKIE_NAME = 'rmmbr';
     const TOKEN_LENGTH = 12;
     const HASH_LENGTH = 24;
+
     private $cfg;
     private $repo;
-    private $request;
-    private $response;
+    private $serverRequest;
     private $session;
     private $sesAuth;
 
@@ -26,9 +26,9 @@ class Auth
         $this->cfg = $cfg;
         $this->repo = $repo;
 
-        $webFactory = new \Aura\Web\WebFactory($GLOBALS);
-        $this->request = $webFactory->newRequest();
-        $this->response = $webFactory->newResponse();
+        $this->serverRequest = \Laminas\Diactoros\ServerRequestFactory::fromGlobals(
+                $_SERVER, $_GET, $_POST, $_COOKIE, $_FILES
+        );
 
         $this->session = (new \Aura\Session\SessionFactory)->newInstance($_COOKIE);
         $this->sesAuth = $this->session->getSegment('MROA');
@@ -95,9 +95,9 @@ class Auth
     {
         $expire = ((60 * $this->cfg->getOtpExpire()) + time());
         setcookie($this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME,
-                  $otpToken,
-                  $expire,
-                  $this->cfg->getCookiePath());
+            $otpToken,
+            $expire,
+            $this->cfg->getCookiePath());
     }
 
     /**
@@ -149,7 +149,7 @@ class Auth
 
         // use next smtp host if flag is set
         if ($useNextSmtpHost) {
-            $lastServerKey = $testLastServerKey ?? $this->request->cookies->get($cookieName);
+            $lastServerKey = $testLastServerKey ?? $this->serverRequest->getCookieParams()[$cookieName];
             $nextServerKey = $lastServerKey + 1;
             $serverKey = $mailer->sendEmailFallback($nextServerKey);
             return;
@@ -164,9 +164,9 @@ class Auth
         // if multiple smtp hosts are set, track last smtp host used
         if (count($this->cfg->getServers()) > 1)
             setcookie($cookieName,
-                      (string) $serverKey,
-                      0,
-                      $this->cfg->getCookiePath());
+                (string) $serverKey,
+                0,
+                $this->cfg->getCookiePath());
     }
 
     /**
@@ -190,7 +190,7 @@ class Auth
         $otpVerified = password_verify($otp, $dbData['otpHash']);
 
         // check if OTP cookie token is valid
-        $newOtpToken = $testOtpToken ?? $this->request->cookies->get($this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME);
+        $newOtpToken = $testOtpToken ?? $this->serverRequest->getCookieParams()[$this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME];
 
         return ($otpVerified && $newOtpToken === $dbData['otpToken']);
     }
@@ -249,9 +249,9 @@ class Auth
         $howLong = $howLong ?? $this->cfg->getRememberCookieExpire();
 
         setcookie($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME,
-                  $token . $validator,
-                  ($howLong + time()),
-                  $this->cfg->getCookiePath());
+            $token . $validator,
+            ($howLong + time()),
+            $this->cfg->getCookiePath());
     }
 
     /**
@@ -261,7 +261,7 @@ class Auth
      */
     private function getRememberMeCookie(): ?string
     {
-        return $this->request->cookies->get($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME, null);
+        return $this->serverRequest->getCookieParams()[$this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME] ?? null;
     }
 
     /**
@@ -304,14 +304,14 @@ class Auth
         $this->session->destroy();
 
         setcookie($this->cfg->getCookiePrefix() . self::REMEMBER_COOKIE_NAME,
-                  '',
-                  -1,
-                  $this->cfg->getCookiePath());
+            '',
+            -1,
+            $this->cfg->getCookiePath());
 
         setcookie($this->cfg->getCookiePrefix() . self::OTP_TOKEN_COOKIE_NAME,
-                  '',
-                  -1,
-                  $this->cfg->getCookiePath());
+            '',
+            -1,
+            $this->cfg->getCookiePath());
     }
 
     /**
@@ -352,4 +352,5 @@ class Auth
 
         return $this->repo->userId($username);
     }
+
 }

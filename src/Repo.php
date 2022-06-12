@@ -43,8 +43,7 @@ class Repo
 
         $where = [$this->cfg->getUsernameColumn() => $username];
 
-        if (!$user = $this->mapper->findOne($this->cfg->getTable(), $where))
-            return null;
+        $user = $this->mapper->findOne($this->cfg->getTable(), $where);
 
         return $user[$this->cfg->getEmailColumn()];
     }
@@ -163,4 +162,5 @@ class Repo
 
         return (int) $row[$this->cfg->getUserIdColumn()];
     }
+
 }

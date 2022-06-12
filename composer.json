@@ -18,12 +18,13 @@
     "require": {
         "php": ">=7.1",
         "metarush/data-mapper": "^1",
-        "aura/web": "^2.1",
         "metarush/email-fallback": "^4",
+        "laminas/laminas-diactoros": "2.11.*",
         "aura/session": "^2.1"
     },
     "require-dev": {
         "vlucas/phpdotenv": "^3.1",
-        "phpunit/phpunit": "^7.5"
+        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^1.7"
     }
 }

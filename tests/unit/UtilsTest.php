@@ -22,21 +22,21 @@ class UtilsTest extends TestCase
         $pool = 'abc';
         $pattern = '~([a-z])+~';
         $test = Utils::randomToken($length, $pool);
-        $this->assertRegExp($pattern, $test);
+        $this->assertMatchesRegularExpression($pattern, $test);
 
         $pool = 'ABC';
         $pattern = '~([A-Z])+~';
         $test = Utils::randomToken($length, $pool);
-        $this->assertRegExp($pattern, $test);
+        $this->assertMatchesRegularExpression($pattern, $test);
 
         $pool = '123';
         $pattern = '~([0-9])+~';
         $test = Utils::randomToken($length, $pool);
-        $this->assertRegExp($pattern, $test);
+        $this->assertMatchesRegularExpression($pattern, $test);
 
         $pool = 'xyzXYZ123';
         $pattern = '~([a-zA-Z0-9])+~';
         $test = Utils::randomToken($length, $pool);
-        $this->assertRegExp($pattern, $test);
+        $this->assertMatchesRegularExpression($pattern, $test);
     }
 }

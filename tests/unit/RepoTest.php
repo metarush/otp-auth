@@ -15,7 +15,7 @@ class RepoTest extends TestCase
     private $repo;
     private $cfg;
 
-    public function setUp()
+    public function setUp(): void
     {
         // ----------------------------------------------
         // setup test db
@@ -65,7 +65,7 @@ class RepoTest extends TestCase
         $this->repo = new OtpAuth\Repo($this->cfg, $this->mapper);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         // close the DB connections so unlink will work
         unset($this->repo);
@@ -181,6 +181,24 @@ class RepoTest extends TestCase
 
         $this->assertEquals($hash, $arr[$this->cfg->getRememberHashColumn()]);
         $this->assertEquals($token, $arr[$this->cfg->getRememberTokenColumn()]);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testGetRememberMeHashAndTokenTokenNotExist()
+    {
+        $hash = '123';
+        $token = 'abc';
+        $username = 'foo';
+
+        // seed data
+        $this->repo->setRememberMeHashAndToken($hash, $token, $username);
+
+        // then check
+        $res = $this->repo->getRememberMeHashAndToken('non-existent-token');
+
+        $this->assertNull($res);
     }
 
     /**

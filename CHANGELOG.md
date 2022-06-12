@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.0.2 - 2022-06-12
+
+- Replace aura/web with laminas/laminas-diactoros due to incompability issues with PHP 8
+
 ## 4.0.1 - 2021-09-23
 
 ### Fixed

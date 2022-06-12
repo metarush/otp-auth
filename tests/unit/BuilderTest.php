@@ -7,13 +7,12 @@ use PHPUnit\Framework\TestCase;
 
 class BuilderTest extends TestCase
 {
-
-    public function setUp()
+    public function setUp(): void
     {
         $this->dbFile = __DIR__ . '/test.db';
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (file_exists($this->dbFile))
             unlink($this->dbFile);
@@ -23,9 +22,29 @@ class BuilderTest extends TestCase
     {
         $otpAuth = (new OtpAuth\Builder)
             ->setDsn('sqlite:' . $this->dbFile)
+            ->setDbUser('none') // all stuff below are for test/code coverage only
+            ->setDbPass('none')
+            ->setRememberHashColumn('none')
+            ->setRememberTokenColumn('none')
+            ->setOtpExpireColumn('none')
+            ->setSubject('none')
+            ->setBody('none')
+            ->setCookiePrefix('none')
+            ->setCookiePath('/')
+            ->setRememberCookieExpire(0)
+            ->setUserIdColumn('none')
+            ->setCharacterPool('none')
             ->build();
 
         $this->assertInstanceOf(OtpAuth\Auth::class, $otpAuth);
+    }
+
+    public function testBuilderGetSmtpServer()
+    {
+        $builder = new OtpAuth\Builder;
+        $smtpServer = $builder->SmtpServer();
+
+        $this->assertInstanceOf(\MetaRush\EmailFallback\Server::class, $smtpServer);
     }
 
     public function testChildClass()
@@ -40,4 +59,5 @@ class BuilderTest extends TestCase
 
         $this->assertEquals('foo', $foo);
     }
+
 }

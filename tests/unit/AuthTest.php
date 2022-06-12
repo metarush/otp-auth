@@ -24,7 +24,7 @@ class AuthTest extends TestCase
     private $testUserEmail;
     private $otp;
 
-    public function setUp()
+    public function setUp(): void
     {
         // ----------------------------------------------
         // load test smtp details from .env to $_ENV
@@ -124,7 +124,7 @@ class AuthTest extends TestCase
         $this->seedTestData();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         // close the DB connections so unlink will work
         unset($this->otpAuth);
@@ -140,7 +140,8 @@ class AuthTest extends TestCase
     public function seedTestData()
     {
         $data = [
-            ['email' => $this->testUserEmail]
+            ['email' => $this->testUserEmail],
+            ['email' => 'invalid-email-user']
         ];
 
         foreach ($data as $v)
@@ -162,6 +163,26 @@ class AuthTest extends TestCase
         $this->otpAuth->sendOtp($this->otp, $this->testUserEmail);
 
         $this->assertTrue(true);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testSendOtpNonExistentUser()
+    {
+        $this->expectExceptionMessageMatches('/does not exist/');
+
+        $this->otpAuth->sendOtp($this->otp, 'non-existent-user');
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testSendOtpInvalidEmail()
+    {
+        $this->expectExceptionMessageMatches('/Email appears to be invalid/');
+
+        $this->otpAuth->sendOtp($this->otp, 'invalid-email-user');
     }
 
     /**
@@ -346,7 +367,7 @@ class AuthTest extends TestCase
         // seed data
         $this->mapper->create($this->table, $data);
         $actual = $this->otpAuth->userId($username);
-        $expected = 2;
+        $expected = 3;
         $this->assertEquals($expected, $actual);
     }
 
