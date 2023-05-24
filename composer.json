@@ -19,7 +19,7 @@
         "php": ">=7.1",
         "metarush/data-mapper": "^1",
         "metarush/email-fallback": "^4",
-        "laminas/laminas-diactoros": "2.11.*",
+        "laminas/laminas-diactoros": "2.25.*",
         "aura/session": "^2.1"
     },
     "require-dev": {
