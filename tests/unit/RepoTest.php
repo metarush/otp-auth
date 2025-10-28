@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use \PHPUnit\Framework\TestCase;
 use \MetaRush\OtpAuth;
-use \MetaRush\DataMapper;
+use \MetaRush\DataAccess;
 
 class RepoTest extends TestCase
 {
-    private $mapper;
+    private $dal;
     private $table;
     private $pdo;
     private $dbFile;
@@ -49,7 +49,7 @@ class RepoTest extends TestCase
         // init Repo
         // ----------------------------------------------
 
-        $this->mapper = (new DataMapper\Builder)
+        $this->dal = (new DataAccess\Builder)
             ->setDsn($dsn)
             ->build();
 
@@ -62,14 +62,14 @@ class RepoTest extends TestCase
             ->setOtpHashColumn('otpHash')
             ->setOtpTokenColumn('otpToken');
 
-        $this->repo = new OtpAuth\Repo($this->cfg, $this->mapper);
+        $this->repo = new OtpAuth\Repo($this->cfg, $this->dal);
     }
 
     public function tearDown(): void
     {
         // close the DB connections so unlink will work
         unset($this->repo);
-        unset($this->mapper);
+        unset($this->dal);
         unset($this->pdo);
 
         if (file_exists($this->dbFile))
@@ -86,7 +86,7 @@ class RepoTest extends TestCase
         ];
 
         foreach ($data as $v)
-            $this->mapper->create($this->table, $v);
+            $this->dal->create($this->table, $v);
     }
 
     /**
@@ -122,7 +122,7 @@ class RepoTest extends TestCase
 
         $this->repo->setOtpData($otpHash, $otpToken, $username);
 
-        $row = $this->mapper->findOne($this->table, [$this->cfg->getUsernameColumn() => $username]);
+        $row = $this->dal->findOne($this->table, [$this->cfg->getUsernameColumn() => $username]);
 
         $this->assertEquals($otpHash, $row[$this->cfg->getOtpHashColumn()]);
         $this->assertEquals($otpToken, $row[$this->cfg->getOtpTokenColumn()]);
@@ -158,7 +158,7 @@ class RepoTest extends TestCase
 
         $this->repo->setRememberMeHashAndToken($hash, $token, $username);
 
-        $row = $this->mapper->findOne($this->table, [$this->cfg->getUsernameColumn() => $username]);
+        $row = $this->dal->findOne($this->table, [$this->cfg->getUsernameColumn() => $username]);
 
         $this->assertEquals($hash, $row[$this->cfg->getRememberHashColumn()]);
         $this->assertEquals($token, $row[$this->cfg->getRememberTokenColumn()]);
@@ -215,7 +215,7 @@ class RepoTest extends TestCase
         ];
 
         // seed data
-        $this->mapper->create($this->table, $data);
+        $this->dal->create($this->table, $data);
 
         $dbUsername = $this->repo->getUsernameFromRememberToken($token);
 
@@ -230,7 +230,7 @@ class RepoTest extends TestCase
         $username = 'bar';
         $data = [$this->cfg->getUsernameColumn() => $username];
         // seed data
-        $this->mapper->create($this->table, $data);
+        $this->dal->create($this->table, $data);
         $actual = $this->repo->userId($username);
         $expected = 2;
         $this->assertEquals($expected, $actual);
@@ -238,7 +238,7 @@ class RepoTest extends TestCase
         $username = 'qux';
         $data = [$this->cfg->getUsernameColumn() => $username];
         // seed data
-        $this->mapper->create($this->table, $data);
+        $this->dal->create($this->table, $data);
         $actual = $this->repo->userId($username);
         $expected = 3;
         $this->assertEquals($expected, $actual);

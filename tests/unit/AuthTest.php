@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use \PHPUnit\Framework\TestCase;
 use \MetaRush\OtpAuth;
-use \MetaRush\DataMapper;
+use \MetaRush\DataAccess;
 
 /**
  * Note: Don't remove the @runInSeparateProcess annottation in methods or else
@@ -15,7 +15,7 @@ use \MetaRush\DataMapper;
  */
 class AuthTest extends TestCase
 {
-    private $mapper;
+    private $dal;
     private $table;
     private $pdo;
     private $dbFile;
@@ -65,9 +65,9 @@ class AuthTest extends TestCase
         // init OtpAuth
         // ----------------------------------------------
 
-        $this->mapper = new DataMapper\DataMapper(
-            new DataMapper\Adapters\AtlasQuery(
-                (new DataMapper\Config)
+        $this->dal = new DataAccess\DataAccess(
+            new DataAccess\Adapters\AtlasQuery(
+                (new DataAccess\Config)
                     ->setAdapter('AtlasQuery')
                     ->setDsn($dsn)
             )
@@ -109,7 +109,7 @@ class AuthTest extends TestCase
 
         $this->otpAuth = new OtpAuth\Auth(
             $this->cfg,
-            new OtpAuth\Repo($this->cfg, $this->mapper)
+            new OtpAuth\Repo($this->cfg, $this->dal)
         );
 
         // ----------------------------------------------
@@ -128,7 +128,7 @@ class AuthTest extends TestCase
     {
         // close the DB connections so unlink will work
         unset($this->otpAuth);
-        unset($this->mapper);
+        unset($this->dal);
         unset($this->pdo);
 
         if (file_exists($this->dbFile))
@@ -145,7 +145,7 @@ class AuthTest extends TestCase
         ];
 
         foreach ($data as $v)
-            $this->mapper->create($this->table, $v);
+            $this->dal->create($this->table, $v);
     }
 
     public function testUserExist()
@@ -270,7 +270,7 @@ class AuthTest extends TestCase
         $this->otpAuth->sendOtp($this->otp, $username);
 
         $where = [$this->cfg->getUsernameColumn() => $username];
-        $row = $this->mapper->findOne($this->table, $where);
+        $row = $this->dal->findOne($this->table, $where);
 
         // test normal valid otp
         $valid = $this->otpAuth->validOtp($this->otp, $username, $row[$this->cfg->getOtpTokenColumn()]);
@@ -278,8 +278,8 @@ class AuthTest extends TestCase
 
         // deliberately expire otp
         $data = [$this->cfg->getOtpExpireColumn() => time() - (10 * 60)];
-        $this->mapper->update($this->table, $data, $where);
-        $row = $this->mapper->findOne($this->table, $where);
+        $this->dal->update($this->table, $data, $where);
+        $row = $this->dal->findOne($this->table, $where);
         $valid = $this->otpAuth->validOtp($this->otp, $username, $row[$this->cfg->getOtpTokenColumn()]);
         $this->assertFalse($valid);
     }
@@ -291,7 +291,7 @@ class AuthTest extends TestCase
     {
         $this->otpAuth->remember($this->testUserEmail);
 
-        $row = $this->mapper->findOne($this->table, [$this->cfg->getUsernameColumn() => $this->testUserEmail]);
+        $row = $this->dal->findOne($this->table, [$this->cfg->getUsernameColumn() => $this->testUserEmail]);
 
         $this->assertNotNull($row[$this->cfg->getRememberHashColumn()]);
         $this->assertNotNull($row[$this->cfg->getRememberTokenColumn()]);
@@ -314,7 +314,7 @@ class AuthTest extends TestCase
             $this->cfg->getRememberHashColumn()  => $hash
         ];
 
-        $this->mapper->create($this->table, $data);
+        $this->dal->create($this->table, $data);
 
         // test
         $dbUsername = $this->otpAuth->rememberedUsername($token . $validator);
@@ -342,7 +342,7 @@ class AuthTest extends TestCase
             $this->cfg->getUsernameColumn() => $this->testUserEmail
         ];
 
-        $this->mapper->update($this->table, $data, $where);
+        $this->dal->update($this->table, $data, $where);
 
         // simulate elapsed time
         sleep(4);
@@ -365,7 +365,7 @@ class AuthTest extends TestCase
         $username = 'bar@example.com';
         $data = [$this->cfg->getUsernameColumn() => $username];
         // seed data
-        $this->mapper->create($this->table, $data);
+        $this->dal->create($this->table, $data);
         $actual = $this->otpAuth->userId($username);
         $expected = 3;
         $this->assertEquals($expected, $actual);

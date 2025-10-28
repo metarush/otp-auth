@@ -16,15 +16,16 @@
         }
     },
     "require": {
-        "php": ">=7.1",
-        "metarush/data-mapper": "^1",
-        "metarush/email-fallback": "^4",
-        "laminas/laminas-diactoros": "2.25.*",
-        "aura/session": "^2.1"
+        "php": ">=8.0",
+        "metarush/data-access": "1.*",
+        "metarush/email-fallback": "4.*",
+        "laminas/laminas-diactoros": "2.*",
+        "aura/session": "2.*"
     },
     "require-dev": {
-        "vlucas/phpdotenv": "^3.1",
-        "phpunit/phpunit": "^9.5",
-        "phpstan/phpstan": "^1.7"
-    }
+        "vlucas/phpdotenv": "3.*",
+        "phpunit/phpunit": "9.*",
+        "phpstan/phpstan": "1.*"
+    },
+    "repositories": [{"type": "vcs", "url": "https://github.com/metarush/data-access"}]
 }

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 4.0.4 - 2025-10-29
+
+### Changed
+
+- Replaced internal data access layer.
+
 ## 4.0.3 - 2023-05-25
 
 ### Fixed

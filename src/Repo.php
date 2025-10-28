@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace MetaRush\OtpAuth;
 
-use MetaRush\DataMapper;
+use MetaRush\DataAccess;
 
 class Repo
 {
     private $cfg;
-    private $mapper;
+    private $dal;
 
-    public function __construct(Config $cfg, DataMapper\DataMapper $mapper)
+    public function __construct(Config $cfg, DataAccess\DataAccess $dal)
     {
         $this->cfg = $cfg;
-        $this->mapper = $mapper;
+        $this->dal = $dal;
     }
 
     /**
@@ -27,7 +27,7 @@ class Repo
     {
         $where = [$this->cfg->getUsernameColumn() => $username];
 
-        return $this->mapper->findOne($this->cfg->getTable(), $where) ? true : false;
+        return $this->dal->findOne($this->cfg->getTable(), $where) ? true : false;
     }
 
     /**
@@ -43,7 +43,7 @@ class Repo
 
         $where = [$this->cfg->getUsernameColumn() => $username];
 
-        $user = $this->mapper->findOne($this->cfg->getTable(), $where);
+        $user = $this->dal->findOne($this->cfg->getTable(), $where);
 
         return $user[$this->cfg->getEmailColumn()];
     }
@@ -66,7 +66,7 @@ class Repo
 
         $where = [$this->cfg->getUsernameColumn() => $username];
 
-        $this->mapper->update($this->cfg->getTable(), $data, $where);
+        $this->dal->update($this->cfg->getTable(), $data, $where);
     }
 
     /**
@@ -83,7 +83,7 @@ class Repo
     {
         $where = [$this->cfg->getUsernameColumn() => $username];
 
-        $row = $this->mapper->findOne($this->cfg->getTable(), $where);
+        $row = $this->dal->findOne($this->cfg->getTable(), $where);
 
         return [
             $this->cfg->getOtpHashColumn()   => $row[$this->cfg->getOtpHashColumn()],
@@ -109,7 +109,7 @@ class Repo
 
         $where = [$this->cfg->getUsernameColumn() => $username];
 
-        $this->mapper->update($this->cfg->getTable(), $data, $where);
+        $this->dal->update($this->cfg->getTable(), $data, $where);
     }
 
     /**
@@ -122,7 +122,7 @@ class Repo
     {
         $where = [$this->cfg->getRememberTokenColumn() => $token];
 
-        $row = $this->mapper->findOne($this->cfg->getTable(), $where);
+        $row = $this->dal->findOne($this->cfg->getTable(), $where);
 
         if (!$row)
             return null;
@@ -143,7 +143,7 @@ class Repo
     {
         $where = [$this->cfg->getRememberTokenColumn() => $token];
 
-        $row = $this->mapper->findOne($this->cfg->getTable(), $where);
+        $row = $this->dal->findOne($this->cfg->getTable(), $where);
 
         return $row[$this->cfg->getUsernameColumn()];
     }
@@ -158,7 +158,7 @@ class Repo
     {
         $where = [$this->cfg->getUsernameColumn() => $username];
 
-        $row = $this->mapper->findOne($this->cfg->getTable(), $where);
+        $row = $this->dal->findOne($this->cfg->getTable(), $where);
 
         return (int) $row[$this->cfg->getUserIdColumn()];
     }

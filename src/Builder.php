@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace MetaRush\OtpAuth;
 
-use MetaRush\DataMapper;
+use MetaRush\DataAccess;
 
 class Builder extends Config
 {
-
     /**
      * Return an instance of the OtpAuth class
      *
@@ -16,13 +15,13 @@ class Builder extends Config
      */
     public function build(?string $childClass = null): Auth
     {
-        $mapper = (new DataMapper\Builder)
+        $dal = (new DataAccess\Builder)
             ->setDsn($this->getDsn())
             ->setDbUser($this->getDbUser())
             ->setDbPass($this->getDbPass())
             ->build();
 
-        $repo = new Repo($this, $mapper);
+        $repo = new Repo($this, $dal);
 
         if ($childClass)
             return new $childClass($this, $repo);
