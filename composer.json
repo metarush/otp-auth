@@ -18,7 +18,7 @@
     "require": {
         "php": ">=8.0",
         "metarush/data-access": "1.*",
-        "metarush/email-fallback": "5.*",
+        "metarush/email-fallback": "4.* || 5.* || 6.*",
         "laminas/laminas-diactoros": "2.*",
         "aura/session": "2.*"
     },
@@ -27,5 +27,8 @@
         "phpunit/phpunit": "9.*",
         "phpstan/phpstan": "1.*"
     },
-    "repositories": [{"type": "vcs", "url": "https://github.com/metarush/data-access"}]
+    "repositories": [{
+            "type": "vcs",
+            "url": "https://github.com/metarush/data-access"
+        }]
 }

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+
+## 4.0.6 - 2025-11-24
+
+### Changed
+
+- Added support for metarush/email-fallback v6 while retaining v5/v4 compatibility.
+
 ## 4.0.5 - 2025-11-24
 
 ### Changed
