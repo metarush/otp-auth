@@ -18,7 +18,7 @@
     "require": {
         "php": ">=8.0",
         "metarush/data-access": "1.*",
-        "metarush/email-fallback": "4.*",
+        "metarush/email-fallback": "5.*",
         "laminas/laminas-diactoros": "2.*",
         "aura/session": "2.*"
     },

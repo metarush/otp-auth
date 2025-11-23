@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 4.0.5 - 2025-11-24
+
+### Changed
+
+- Upgrade dependency metarush/email-fallback to v5.
+
 ## 4.0.4 - 2025-10-29
 
 ### Changed
