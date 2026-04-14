@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 4.1.0 - 2026-04-16
+
+### Added
+
+- Internal: Add support for metarush/data-access v2.*.
+
+### Fixed
+
+- Fix outgoing OTP message.
 
 ## 4.0.6 - 2025-11-24
 

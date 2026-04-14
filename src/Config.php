@@ -10,7 +10,7 @@ class Config extends \MetaRush\EmailFallback\Config
     private $rememberTokenColumn = 'rememberToken';
     private $rememberCookieExpire = 2592000; // 30 days
     private $subject = "Here's your OTP";
-    private $body = "{OTP}\r\n\r\nNote: This OTP is valid for 5 minutes";
+    private $body = null;
     private $dsn;
     private $dbUser = null;
     private $dbPass = null;
@@ -277,7 +277,7 @@ class Config extends \MetaRush\EmailFallback\Config
      */
     public function getBody(): string
     {
-        return $this->body;
+        return (string) ($this->body ?? "{OTP}\r\n\r\nNote: This OTP is valid for {$this->getOtpExpire()} minutes");
     }
 
     /**
@@ -294,7 +294,7 @@ class Config extends \MetaRush\EmailFallback\Config
 
     /**
      * Get the name of table column where userId is stored
-     * 
+     *
      * @return string
      */
     public function getUserIdColumn(): string
